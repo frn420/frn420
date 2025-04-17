@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logistics Access - Receiver Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
+      color: #5D4037;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #8BC34A;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #795548;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .logistics-dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .logistics-column {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .logistics-column h2 {
+      font-size: 1.6rem;
+      color: #689F38;
+      border-left: 6px solid #D84315;
+      padding-left: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 30px rgba(139, 195, 74, 0.3);
+      transition: all 0.4s ease;
+      position: relative;
+      animation: cardEnter 0.6s ease forwards;
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 12px 35px rgba(139, 195, 74, 0.4);
+      border: 1px solid #D84315;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      color: #33691E;
+      margin-bottom: 10px;
+      text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .card p {
+      color: #6D4C41;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .card button {
+      background-color: #8BC34A;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      font-weight: 600;
+    }
+
+    .card button::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, #D84315 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .card button:hover::after {
+      opacity: 0.15;
+    }
+
+    .card button:hover {
+      background-color: #689F38;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(139, 195, 74, 0.4);
+    }
+
+    footer {
+      margin-top: 60px;
+      color: #9E9E9E;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-overlay"></div>
+  <h1>Logistics Management</h1>
+  <p class="subtitle">Access logistics information to manage and track resources</p>
+
+  <div class="logistics-dashboard">
+    <div class="logistics-column">
+      <h2>Track Logistics</h2>
+      <div class="card">
+        <h3>Available Donations</h3>
+        <p>View available donations that need to be transported or distributed.</p>
+        <button onclick="viewAvailableDonations()">View Donations</button>
+      </div>
+      <div class="card">
+        <h3>Manage Deliveries</h3>
+        <p>Track the status of deliveries and coordinate logistics.</p>
+        <button onclick="viewDeliveries()">Manage Deliveries</button>
+      </div>
+      <div class="card">
+        <h3>Logistics Requests</h3>
+        <p>Submit and review requests for logistics support.</p>
+        <button onclick="viewLogisticsRequests()">View Requests</button>
+      </div>
+    </div>
+
+    <div class="logistics-column">
+      <h2>Resources & Tools</h2>
+      <div class="card">
+        <h3>Driver Availability</h3>
+        <p>Check available drivers for transportation tasks.</p>
+        <button onclick="viewDriverAvailability()">View Drivers</button>
+      </div>
+      <div class="card">
+        <h3>Partner Logistics</h3>
+        <p>Coordinate logistics with our partners to streamline deliveries.</p>
+        <button onclick="viewPartnerLogistics()">View Partners</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Food Rescue Network - Logistics Portal
+  </footer>
+
+  <script>
+    function viewAvailableDonations() {
+      window.location.href = "available-donations.html";
+    }
+
+    function viewDeliveries() {
+      window.location.href = "manage-deliveries.html";
+    }
+
+    function viewLogisticsRequests() {
+      window.location.href = "logistics-requests.html";
+    }
+
+    function viewDriverAvailability() {
+      window.location.href = "driver-availability.html";
+    }
+
+    function viewPartnerLogistics() {
+      window.location.href = "partner-logistics.html";
+    }
+  </script>
+</body>
+</html>

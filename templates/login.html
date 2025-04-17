@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Zomato Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 3rem;
+      border-radius: 2rem;
+      box-shadow: 0 12px 40px rgba(139, 195, 74, 0.35);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      color: #8BC34A;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.85rem;
+      border: 1px solid #ccc;
+      border-radius: 1rem;
+    }
+
+    .login-btn {
+      background: linear-gradient(135deg, #689F38, #33691E);
+      color: white;
+      padding: 0.85rem;
+      width: 100%;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    .footer-text {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-text a {
+      color: #8BC34A;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Welcome Back</h2>
+      <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <div class="footer-text">
+        Don't have an account? <a href="signup.html">Sign up</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const matchedUser = users.find(user => user.email === email && user.password === password);
+
+      if (matchedUser) {
+        alert("Login successful!");
+        window.location.href = "/dashboard.html"; // Redirect to the Flask route
+      } else {
+        alert("Invalid email or password.");
+      }
+    });
+  </script>
+</body>
+</html>

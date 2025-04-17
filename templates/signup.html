@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - Zomato Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .signup-container {
+      background: #fff;
+      padding: 3rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .signup-container h2 {
+      text-align: center;
+      color: #4caf50;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .signup-btn {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 0.75rem;
+      width: 100%;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .footer a {
+      color: #388e3c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+      </div>
+      <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
+    <div class="footer">
+      Already have an account? <a href="login.html">Log in</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const userExists = users.find(user => user.email === email);
+      if (userExists) {
+        alert("Email already registered. Please log in.");
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Sign up successful! Redirecting to login...");
+      window.location.href = "login.html";
+    });
+  </script>
+
+</body>
+</html>

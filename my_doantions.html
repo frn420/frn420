@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Donations | Food Rescue Network</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
+      color: #2f855a;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #22543d;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .top-bar {
+      max-width: 1000px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    #searchInput, select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #a0aec0;
+      font-size: 1rem;
+      color: #2f855a;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .add-btn {
+      background-color: #38a169;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background-color: #2f855a;
+    }
+
+    .donation-summary {
+      max-width: 1000px;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+      font-size: 1rem;
+      color: #4a5568;
+    }
+
+    .donation-list {
+      max-width: 1000px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .donation-card {
+      background-color: white;
+      border-left: 6px solid #38a169;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      animation: fadeInUp 0.5s ease;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .donation-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .donation-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.4rem;
+      color: #2f855a;
+    }
+
+    .donation-card p {
+      font-size: 1rem;
+      color: #4a5568;
+      margin: 4px 0;
+    }
+
+    .tags {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background-color: #c6f6d5;
+      color: #22543d;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .status {
+      font-weight: bold;
+      color: #2b6cb0;
+    }
+
+    .actions {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #e2e8f0;
+      color: #2d3748;
+      transition: background 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background-color: #cbd5e0;
+    }
+
+    .back-button {
+      margin-top: 30px;
+      background-color: #38a169;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #2f855a;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #718096;
+      text-align: center;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Donations</h1>
+  <p class="subtitle">Track your current and past food donations</p>
+
+  <div class="top-bar">
+    <input type="text" id="searchInput" placeholder="Search donations..." />
+    <select id="statusFilter">
+      <option>All Donations</option>
+      <option>Awaiting Pickup</option>
+      <option>Picked Up</option>
+      <option>Completed</option>
+    </select>
+    <button class="add-btn">+ New Donation</button>
+  </div>
+
+  <div class="donation-summary">
+    Total Donations: <strong>3</strong>
+  </div>
+
+  <div class="donation-list" id="donationList">
+    <div class="donation-card">
+      <div class="actions">
+        <button class="action-btn">Edit</button>
+        <button class="action-btn">Cancel</button>
+      </div>
+      <h3>Fresh Produce - 2 Boxes</h3>
+      <p>Location: Green Market, Downtown</p>
+      <p>Date Donated: April 3, 2025</p>
+      <p>Status: <span class="status">Picked Up</span></p>
+      <div class="tags">
+        <span class="tag">Vegetables</span>
+        <span class="tag">Organic</span>
+      </div>
+    </div>
+
+    <div class="donation-card">
+      <div class="actions">
+        <button class="action-btn">Edit</button>
+        <button class="action-btn">Cancel</button>
+      </div>
+      <h3>Packaged Snacks - 12 Bags</h3>
+      <p>Location: Central Café</p>
+      <p>Date Donated: April 4, 2025</p>
+      <p>Status: <span class="status">Awaiting Pickup</span></p>
+      <div class="tags">
+        <span class="tag">Snacks</span>
+        <span class="tag">Non-Perishable</span>
+      </div>
+    </div>
+
+    <div class="donation-card">
+      <div class="actions">
+        <button class="action-btn">Details</button>
+      </div>
+      <h3>Frozen Meals - 10 Trays</h3>
+      <p>Location: Uptown Kitchen</p>
+      <p>Date Donated: March 30, 2025</p>
+      <p>Status: <span class="status">Completed</span></p>
+      <div class="tags">
+        <span class="tag">Frozen</span>
+        <span class="tag">Meals</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-button" onclick="goBack()">← Back to Dashboard</button>
+
+  <footer>
+    © 2025 Food Rescue Network. All rights reserved.
+  </footer>
+
+  <script>
+    function goBack() {
+      window.location.href = "donor-dashboard.html";
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const cards = document.querySelectorAll(".donation-card");
+
+    function filterDonations() {
+      const query = searchInput.value.toLowerCase();
+      const statusSelected = statusFilter.value.toLowerCase();
+
+      cards.forEach(card => {
+        const title = card.querySelector("h3").textContent.toLowerCase();
+        const location = card.querySelector("p:nth-of-type(1)").textContent.toLowerCase();
+        const status = card.querySelector(".status").textContent.toLowerCase();
+
+        const matchesSearch = title.includes(query) || location.includes(query) || status.includes(query);
+        const matchesStatus = statusSelected === "all donations" || status.includes(statusSelected);
+
+        card.style.display = (matchesSearch && matchesStatus) ? "block" : "none";
+      });
+    }
+
+    searchInput.addEventListener("input", filterDonations);
+    statusFilter.addEventListener("change", filterDonations);
+  </script>
+</body>
+</html>
