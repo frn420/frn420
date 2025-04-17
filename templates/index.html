@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Nutrient Detector</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        img { margin-top: 20px; max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Upload a Food Image</h1>
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+        <input type="file" name="food_image" accept="image/*" required>
+        <button type="submit">Predict Nutrients</button>
+    </form>
+
+    {% if result %}
+        <hr>
+        <h2>Uploaded Image:</h2>
+        <img src="{{ result.image_url }}" alt="Uploaded Food" width="300">
+
+        <h2>Prediction: {{ result.food }}</h2>
+        <p>Calories: {{ result.nutrients.calories }}</p>
+        <p>Protein: {{ result.nutrients.protein }} g</p>
+        <p>Fat: {{ result.nutrients.fat }} g</p>
+    {% endif %}
+</body>
+</html>
