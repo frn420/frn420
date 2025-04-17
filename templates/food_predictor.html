@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Predictor</title>
+</head>
+<body>
+    <h1>Food Predictor</h1>
+    <form action="/food-predictor" method="POST" enctype="multipart/form-data">
+        <label for="food_image">Upload an image of food:</label>
+        <input type="file" name="food_image" id="food_image" required>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if food_name %}
+        <h2>Prediction Results</h2>
+        <p><strong>Food:</strong> {{ food_name }}</p>
+        <p><strong>Nutrients:</strong></p>
+        <ul>
+            {% for key, value in nutrients.items() %}
+                <li>{{ key }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
+    {% endif %}
+</body>
+</html>

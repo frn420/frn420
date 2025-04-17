@@ -5,7 +5,7 @@ from PIL import Image
 from food_predictor import predict_nutrients
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -28,28 +28,24 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    try:
+@app.route('/food-predictor', methods=['GET', 'POST'])
+def food_predictor():
+    if request.method == 'POST':
         # Handle file upload
         file = request.files['food_image']
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+        if file:
+            filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+            file.save(filepath)
 
-        # Perform prediction
-        food_name, nutrients = predict_nutrients(filepath)
-        image_url = url_for('static', filename=f'uploads/{filename}')
+            # Predict food and nutrients
+            food_name, nutrients = predict_nutrients(filepath)
+            image_url = url_for('static', filename=f'uploads/{file.filename}')
 
-        # Prepare result
-        result = {
-            'food': food_name,
-            'nutrients': nutrients,
-            'image_url': image_url
-        }
-        return render_template('dashboard.html', result=result)  # Show results on the dashboard
-    except Exception as e:
-        return render_template('dashboard.html', error=str(e))  # Show error on the dashboard
+            # Pass results to the template
+            return render_template('food_predictor.html', food_name=food_name, nutrients=nutrients, image_url=image_url)
+
+    # Render the upload form
+    return render_template('food_predictor.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
