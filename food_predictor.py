@@ -12,8 +12,11 @@ model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
 model.fc = torch.nn.Linear(model.fc.in_features, 101)  # 101 classes in Food-101
 model.eval()
 
-# Load fine-tuned weights
-model.load_state_dict(torch.load("E:\\PROTECH\\predict\\model\\model.pth", map_location=torch.device('cpu')))
+# Use a relative path to the model file
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "model", "model.pth")
+
+# Load the model
+model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
 
 # Define some sample nutrient data (you can expand this)
 sample_nutrients = {
