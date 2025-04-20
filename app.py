@@ -31,21 +31,67 @@ def dashboard():
 @app.route('/food-predictor', methods=['GET', 'POST'])
 def food_predictor():
     if request.method == 'POST':
-        # Handle file upload
+        # Handle file upload and prediction logic
+        if 'food_image' not in request.files:
+            return "No file part", 400
+
         file = request.files['food_image']
+        if file.filename == '':
+            return "No selected file", 400
+
         if file:
-            filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+            # Save the uploaded file
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
 
-            # Predict food and nutrients
+            # Call the food predictor function
             food_name, nutrients = predict_nutrients(filepath)
-            image_url = url_for('static', filename=f'uploads/{file.filename}')
 
-            # Pass results to the template
-            return render_template('food_predictor.html', food_name=food_name, nutrients=nutrients, image_url=image_url)
+            # Render the results in a template
+            return render_template(
+                'food_predictor.html',
+                result={
+                    'image_url': url_for('static', filename=f'uploads/{filename}'),
+                    'food': food_name,
+                    'nutrients': nutrients,
+                    'message': f"Your {food_name} is ready for donation!"
+                }
+            )
+    return render_template('food_predictor.html')  # For GET requests
 
-    # Render the upload form
-    return render_template('food_predictor.html')
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    if 'imageUpload' not in request.files:
+        return "No file part", 400
+
+    file = request.files['imageUpload']
+    if file.filename == '':
+        return "No selected file", 400
+
+    if file:
+        # Save the uploaded file
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        # Optionally, process the image (e.g., predict nutrients)
+        food_name, nutrients = predict_nutrients(filepath)
+
+        # Return a response (e.g., render a template with the results)
+        return render_template('create.html', food_name=food_name, nutrients=nutrients, uploaded_image=filename)
+
+@app.route('/donor.html')
+def donor():
+    return render_template('donor.html')
+
+@app.route('/create.html')
+def create_donation():
+    return render_template('create.html')
+
+@app.route('/my_doantions.html')
+def my_donations():
+    return render_template('my_doantions.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

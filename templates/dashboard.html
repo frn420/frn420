@@ -39,48 +39,52 @@
 
     .card-container {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      max-width: 800px;
+      grid-template-columns: 1fr 1fr; /* Two cards per row */
+      gap: 40px;
+      max-width: 1000px;
       width: 100%;
     }
 
     @media (min-width: 768px) {
       .card-container {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr; /* Two cards per row on larger screens */
       }
     }
 
     .card {
       background-color: #ffffff;
       border-radius: 16px;
-      padding: 30px;
+      padding: 40px; /* Increased padding for larger cards */
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
       text-align: center;
+      max-width: 450px; /* Increased width */
+      margin: 0 auto;
+      color: #2f855a; /* Default text color */
     }
 
     .card:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
 
     .card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-      color: #2f855a;
+      font-size: 1.8rem; /* Larger heading */
+      margin-bottom: 15px;
+      color: #2f855a; /* Default heading color */
+      transition: color 0.3s ease;
     }
 
     .card p {
-      font-size: 1rem;
+      font-size: 1.1rem; /* Larger text */
       color: #4a5568;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .card button {
       background-color: #38a169;
       color: white;
-      padding: 12px 20px;
-      font-size: 1rem;
+      padding: 15px 25px; /* Increased padding */
+      font-size: 1.1rem;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -88,9 +92,32 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .card button:hover {
-      background-color: #2f855a;
+    .card:hover button {
       transform: scale(1.05);
+    }
+
+    /* Hover effects for cards */
+    .card:not(.emergency-card):hover {
+  background: linear-gradient(135deg, rgba(56, 161, 105, 0.7), rgba(47, 133, 90, 0.7));
+}
+
+
+    .card:hover h2,
+    .card:hover p {
+      color: white;
+    }
+
+    
+
+    .adopt-meal-card:hover h2,
+    .adopt-meal-card:hover p {
+      color: white;
+    }
+
+    /* Emergency Donor System with Red Gradient on Hover */
+    .emergency-card:hover {
+      background: linear-gradient(135deg, rgba(255, 99, 71, 0.7), rgba(255, 0, 0, 0.7));
+      color: white;
     }
 
     .info-section {
@@ -135,24 +162,36 @@
   <div class="card-container">
     <div class="card">
       <h2>I'm a Donor</h2>
-      <p>Share surplus food with communities that need it</p>
-      <button onclick="goToDonor()">Go to Donor Dashboard</button>
+      <p>Donate surplus food to communities in need.</p>
+      <button aria-label="Go to Donor Dashboard" onclick="goToDonor()">Go to Donor Dashboard</button>
     </div>
 
     <div class="card">
       <h2>I'm a Receiver</h2>
-      <p>Request food for your organization or community</p>
-      <button onclick="goToReceiver()">Go to Receiver Dashboard</button>
+      <p>Request food for your organization or community.</p>
+      <button aria-label="Go to Receiver Dashboard" onclick="goToReceiver()">Go to Receiver Dashboard</button>
+    </div>
+
+    <div class="card emergency-card">
+      <h2>Emergency Donor System</h2>
+      <p>Donate food during emergencies to help those in urgent need.</p>
+      <button aria-label="Go to Emergency Donor Dashboard" onclick="goToEmergencyDonor()">Go to Emergency Donor Dashboard</button>
+    </div>
+
+    <div class="card adopt-meal-card">
+      <h2>Adopt a Meal Program</h2>
+      <p>Support individuals or families in need by adopting meals.</p>
+      <button aria-label="Go to Adopt a Meal Program" onclick="goToAdoptMeal()">Go to Adopt a Meal Program</button>
     </div>
   </div>
 
   <div class="info-section">
     <h3>How It Works</h3>
     <ul>
-      <li>Donors register food donations via their dashboard</li>
-      <li>Receivers can browse and request available donations</li>
-      <li>Notifications are sent once a match is found</li>
-      <li>Pickup details are arranged between both parties</li>
+      <li><strong>Donor:</strong> Donate surplus food to those in need.</li>
+      <li><strong>Receiver:</strong> Request food for your organization.</li>
+      <li><strong>Emergency Donor System:</strong> Donate food in urgent situations.</li>
+      <li><strong>Adopt a Meal Program:</strong> Adopt meals for individuals in need.</li>
     </ul>
   </div>
 
@@ -167,6 +206,14 @@
 
     function goToReceiver() {
       window.location.href = "receiver.html";
+    }
+
+    function goToEmergencyDonor() {
+      window.location.href = "emergency.html";  
+    }
+
+    function goToAdoptMeal() {
+      window.location.href = "adopt_a_meal.html";  
     }
   </script>
 

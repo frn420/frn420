@@ -1,28 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Predictor</title>
+    <title>Food Nutrient Detector</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        img { margin-top: 20px; max-width: 100%; }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Food Predictor</h1>
-    <form action="/food-predictor" method="POST" enctype="multipart/form-data">
-        <label for="food_image">Upload an image of food:</label>
-        <input type="file" name="food_image" id="food_image" required>
-        <button type="submit">Predict</button>
-    </form>
+    <h1>Food Donation Details</h1>
 
-    {% if food_name %}
-        <h2>Prediction Results</h2>
-        <p><strong>Food:</strong> {{ food_name }}</p>
-        <p><strong>Nutrients:</strong></p>
-        <ul>
-            {% for key, value in nutrients.items() %}
-                <li>{{ key }}: {{ value }}</li>
-            {% endfor %}
-        </ul>
-        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 300px;">
+    {% if result %}
+        <hr>
+        <h2>Uploaded Image:</h2>
+        <img src="{{ result.image_url }}" alt="Uploaded Food" width="300">
+
+        <h2>Prediction: {{ result.food }}</h2>
+        <p><strong>Calories:</strong> {{ result.nutrients['Calories'] }}</p>
+        <p><strong>Protein:</strong> {{ result.nutrients['Protein'] }}</p>
+        <p><strong>Carbs:</strong> {{ result.nutrients['Carbs'] }}</p>
+        <p><strong>Fats:</strong> {{ result.nutrients['Fats'] }}</p>
+
+        <h3 style="color: green;">{{ result.message }}</h3>
+    {% else %}
+        <p style="color: red;">No results available. Please try again.</p>
     {% endif %}
+
+    <!-- Buttons for Home and Dashboard -->
+    <button class="button" onclick="goToDashboard()">Back to Donor Dashboard</button>
+    
+
+    <script>
+        function goToDashboard() {
+            window.location.href = "/donor.html"; // Redirect to the Donor Dashboard
+        }
+
+    </script>
 </body>
 </html>

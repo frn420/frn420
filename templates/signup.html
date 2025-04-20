@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up - Zomato Style</title>
+  <title>Sign Up</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
@@ -14,7 +14,7 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -28,17 +28,19 @@
       box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       width: 100%;
       max-width: 400px;
+      position: relative;
     }
 
     .signup-container h2 {
       text-align: center;
-      color: #4caf50;
+      color: #8bc34a;
       margin-bottom: 2rem;
       font-size: 2rem;
     }
 
     .form-group {
       margin-bottom: 1.5rem;
+      position: relative;
     }
 
     .form-group label {
@@ -50,13 +52,25 @@
     .form-group input {
       width: 100%;
       padding: 0.75rem;
+      padding-right: 2.5rem;
       border: 1px solid #ccc;
       border-radius: 0.75rem;
       font-size: 1rem;
     }
 
+    .eye-icon {
+      position: absolute;
+      top: 69.69%;
+      right: 1rem;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      fill: #aaa;
+    }
+
     .signup-btn {
-      background-color: #4caf50;
+      background: linear-gradient(135deg, #689F38, #33691E);
       color: #fff;
       padding: 0.75rem;
       width: 100%;
@@ -75,7 +89,7 @@
     }
 
     .footer a {
-      color: #388e3c;
+      color: #8BC34A;
       text-decoration: none;
       font-weight: bold;
     }
@@ -101,6 +115,9 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" required />
+        <svg class="eye-icon" id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
+        </svg>
       </div>
       <button type="submit" class="signup-btn">Sign Up</button>
     </form>
@@ -135,6 +152,15 @@
 
       alert("Sign up successful! Redirecting to login...");
       window.location.href = "login.html";
+    });
+
+    const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    let passwordVisible = false;
+    eyeIcon.addEventListener("click", () => {
+      passwordVisible = !passwordVisible;
+      passwordInput.type = passwordVisible ? "text" : "password";
     });
   </script>
 

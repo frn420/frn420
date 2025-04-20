@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Zomato Style</title>
+  <title>Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
@@ -40,6 +40,7 @@
 
     .form-group {
       margin-bottom: 1.25rem;
+      position: relative;
     }
 
     .form-group label {
@@ -53,6 +54,17 @@
       padding: 0.85rem;
       border: 1px solid #ccc;
       border-radius: 1rem;
+    }
+
+    .eye-icon {
+      position: absolute;
+      top: 69.69%;
+      right: 1rem;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: #aaa;
+      cursor: pointer;
     }
 
     .login-btn {
@@ -93,6 +105,9 @@
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required />
+          <svg class="eye-icon" id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
+          </svg>
         </div>
         <button type="submit" class="login-btn">Login</button>
       </form>
@@ -103,6 +118,14 @@
   </div>
 
   <script>
+    const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    eyeIcon.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+    });
+
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -115,7 +138,7 @@
 
       if (matchedUser) {
         alert("Login successful!");
-        window.location.href = "/dashboard.html"; // Redirect to the Flask route
+        window.location.href = "/dashboard.html";
       } else {
         alert("Invalid email or password.");
       }

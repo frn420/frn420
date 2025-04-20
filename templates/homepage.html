@@ -15,34 +15,31 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
-      color: #5D4037;
-      min-height: 100vh;
-      overflow-x: hidden;
+      background: linear-gradient(135deg, #dcedc8, #c5e1a5);
+      padding-top: 80px;
     }
 
     header {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1.5rem 2rem;
-      color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
+      padding: 1.2rem 3rem;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
+      background: #e8f5e9;
+      backdrop-filter: blur(10px);
+      -webkit-background-filter: blur(10px);
       z-index: 999;
-      backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.3s ease-in-out;
     }
 
     header h1 {
-      font-size: 2rem;
-      color: #ffffff;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      background: linear-gradient(45deg, #dcedc8, #8BC34A);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 1.8rem;
+      color: #4caf50;
+      font-weight: 700;
     }
 
     nav {
@@ -51,45 +48,23 @@
     }
 
     nav a {
-      font-weight: 600;
-      color: white;
       text-decoration: none;
-      font-size: 1rem;
+      font-weight: bold;
+      color: #4caf50;
       padding: 0.5rem 1.2rem;
-      border-radius: 12px;
-      transition: all 0.4s ease;
-      background: linear-gradient(90deg, #8BC34A, #aed581);
-      box-shadow: 0 0 12px rgba(139, 195, 74, 0.6);
-      position: relative;
-      overflow: hidden;
-    }
-
-    nav a::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: left 0.4s ease;
-    }
-
-    nav a:hover::before {
-      left: 0;
+      border-radius: 8px;
+      transition: background 0.3s;
     }
 
     nav a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(139, 195, 74, 0.9);
+      background-color: #e8f5e9;
     }
 
     .hero {
-      background: url('https://images.unsplash.com/photo-1604908176992-0d76c3124b6d?fit=crop&w=1350&q=80') center/cover no-repeat;
-      color: white;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
-      padding: 6rem 2rem;
+      background: linear-gradient(135deg, #dcedc8, #c5e1a5);
+      padding: 3rem 2rem 4rem;
       text-align: center;
+      color: #1b5e20;
       position: relative;
     }
 
@@ -100,7 +75,6 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.35);
       z-index: 1;
     }
 
@@ -116,10 +90,28 @@
     }
 
     .hero p {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
       max-width: 700px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
       animation: fadeInUp 1.4s ease-in-out;
+    }
+
+    .hero button {
+      background-color: #4caf50;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      animation: fadeInUp 1.4s ease-in-out;
+
+    }
+
+    .hero button:hover {
+      background-color: #388e3c;
     }
 
     @keyframes fadeInUp {
@@ -133,35 +125,17 @@
       }
     }
 
-    .taglines {
-      background: #ffffff;
-      padding: 3rem 2rem;
-      text-align: center;
-      color: #33691E;
-    }
-
-    .taglines h3 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .taglines p {
-      font-size: 1.2rem;
-      margin-bottom: 0.8rem;
-      font-weight: 600;
-    }
-
     .section {
-      padding: 4rem 2rem;
       max-width: 1200px;
-      margin: auto;
+      margin: 4rem auto;
+      padding: 0 2rem;
     }
 
     .section h3 {
-      font-size: 2rem;
-      color: #689F38;
-      margin-bottom: 2rem;
       text-align: center;
+      font-size: 2.2rem;
+      color: #2e7d32;
+      margin-bottom: 2rem;
     }
 
     .features {
@@ -172,60 +146,70 @@
 
     .card {
       background: white;
-      border-radius: 1.5rem;
       padding: 2rem;
-      box-shadow: 0 12px 30px rgba(139, 195, 74, 0.3);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(139, 195, 74, 0.2);
       text-align: center;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transition: 0.3s ease;
     }
 
     .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 20px 40px rgba(139, 195, 74, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
     }
 
     .card h4 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       margin-bottom: 1rem;
-      color: #7CB342;
+      color: #558b2f;
     }
 
-    .card p {
-      font-size: 1rem;
+    .taglines {
+      background-color: #f0fdf4;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .taglines h3 {
+      font-size: 2rem;
+      color: #33691E;
+      margin-bottom: 1.2rem;
+    }
+
+    .taglines p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
     }
 
     .cta {
-      background: linear-gradient(90deg, #dcedc8, #c5e1a5);
-      text-align: center;
+      background-color: #dcedc8;
       padding: 3rem 2rem;
-      border-radius: 2rem;
-      margin: 3rem auto;
-      max-width: 800px;
-      box-shadow: 0 0 20px rgba(139, 195, 74, 0.3);
+      text-align: center;
+      border-radius: 1.5rem;
+      margin: 4rem auto;
+      max-width: 900px;
     }
 
     .cta h3 {
       font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #33691E;
+      color: #2e7d32;
+      margin-bottom: 1.5rem;
     }
 
     .cta button {
+      background-color: #43a047;
+      color: white;
       padding: 1rem 2.5rem;
-      font-size: 1.1rem;
       border: none;
       border-radius: 2rem;
-      background: linear-gradient(135deg, #8BC34A, #aed581);
-      color: white;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 0 12px rgba(139, 195, 74, 0.5);
-      transition: all 0.4s ease;
+      transition: background 0.3s ease;
     }
 
     .cta button:hover {
-      background: linear-gradient(135deg, #689F38, #9ccc65);
-      transform: scale(1.05);
+      background-color: #2e7d32;
     }
 
     footer {
@@ -234,6 +218,7 @@
       background-color: #f1f8e9;
       font-size: 1rem;
       color: #5D4037;
+      border-top: 1px solid #cfd8dc;
     }
 
     @media (max-width: 600px) {
@@ -251,14 +236,13 @@
 <body>
   <header>
     <h1>Food Rescue Network</h1>
-    <nav id="navLinks">
-      <!-- Links will be added by JS -->
-    </nav>
+    <nav id="navLinks"></nav>
   </header>
 
   <section class="hero">
-    <h2>Rescue. Reuse. Relieve Hunger.</h2>
+    <h2>One click. One meal. Infinite impact.</h2>
     <p>Be a part of the revolution to reduce food waste and nourish communities in need.</p>
+    <button onclick="window.location.href='sign_up.html'">Donate Now</button>
   </section>
 
   <section class="taglines">
@@ -266,9 +250,6 @@
     <p>Turning leftovers into lifesavers.</p>
     <p>Your excess is someone else's essentials.</p>
     <p>Waste less. Feed more. Feel amazing.</p>
-    <p>From Trash to Treasure: One Meal at a Time.</p>
-    <p>Rescue meals. Ignite hope. End hunger.</p>
-    <p>One app. Thousands fed. Future changed.</p>
   </section>
 
   <section class="section">
@@ -294,8 +275,8 @@
   </section>
 
   <section class="cta">
-    <h3>Ready to Make a Difference?</h3>
-    <button>Join the Movement</button>
+    <h3>So What are you waiting for?</h3>
+    <h2>Make an Impact Today!</h2>
   </section>
 
   <footer>
@@ -309,16 +290,14 @@
 
       if (user && user.name) {
         nav.innerHTML = `
-          <a href="#" style="background:white; color:#4caf50; font-weight:bold; box-shadow:none;">👤 ${user.name}</a>
-          <a href="#" onclick="logout()" style="background:#ff5252; color:white;">Logout</a>
-          <a href="/food-predictor" style="background:#8BC34A; color:white;">Food Predictor</a>
+          <a href="#">👤 ${user.name}</a>
+          <a href="#" onclick="logout()" style="color:red;">Logout</a>
         `;
       } else {
         nav.innerHTML = `
           <a href="#">Home</a>
           <a href="login.html">Login</a>
-          <a href="/food-predictor" style="background:#8BC34A; color:white;">Food Predictor</a>
-          <a href="default-pizza-outlets-13.avif">Join Us</a>
+          <a href="sign_up.html">Join Us</a>
         `;
       }
     });
@@ -327,15 +306,7 @@
       localStorage.removeItem("loggedInUser");
       location.reload();
     }
-
-    function redirectToLogin() {
-      window.location.href = "/login"; // Redirect to the login page
-    }
   </script>
-
-  <h1>Welcome to Our Platform</h1>
-  <button id="join-us" onclick="return false;">Join Us</button> <!-- Non-functional button -->
-  <button id="login" onclick="redirectToLogin()">Login</button>
 </body>
 
 </html>
