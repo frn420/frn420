@@ -94,7 +94,7 @@ def create_donation():
 def my_donations():
     return render_template('my_doantions.html')
 
-@app.route('/pickup')
+@app.route('/pickup.html')
 def pickup():
     return render_template('pickup.html')
 
@@ -102,6 +102,14 @@ def pickup():
 def match():
     return render_template('match.html')
 
+@app.route('/ngo_listings.html')
+def ngo_listings():
+    return render_template('ngo_listings.html')
+
+@app.route('/biofertilizer_listings.html')
+def biofertilizer_listings():
+    return render_template('biofertilizer_listings.html')
+    
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))  # Use the PORT environment variable or default to 5000
