@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adopt a Meal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #166534, #34d399);
+      color: white;
+      padding: 2rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+    .container {
+      max-width: 950px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .intro, .donation-form {
+      padding: 2.5rem;
+      background-color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      display: block;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+      outline: none;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 2rem;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background-color: #059669;
+      transform: translateY(-2px);
+    }
+    .payment-info {
+      background-color: #f0fdf4;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      margin-top: 2rem;
+      border: 2px dashed #10b981;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .payment-info h3 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #166534;
+    }
+    .payment-info code {
+      font-size: 1.2rem;
+      font-weight: bold;
+      background: #fff;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.3rem;
+      border: 1px solid #ccc;
+    }
+    .qr-code {
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .qr-code img {
+      max-width: 240px;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+    .qr-code img:hover {
+      transform: scale(1.05);
+    }
+    .progress-bar-container {
+      margin-top: 2rem;
+      background-color: #e5fbe9;
+      border-radius: 0.5rem;
+      height: 20px;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .progress-bar {
+      background-color: #10b981;
+      height: 100%;
+      width: 0%;
+      border-radius: 0.5rem;
+      transition: width 0.4s ease-in-out;
+    }
+    .donor-list, .testimonials {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .donor-list h3, .testimonials h3 {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #166534;
+      margin-bottom: 1rem;
+    }
+    .donor-item, .testimonial-item {
+      background-color: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin: 0.5rem;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+    }
+    .social-icons a {
+      color: #166534;
+      text-decoration: none;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      padding: 2rem 0;
+    }
+    .footer a {
+      color: #166534;
+      text-decoration: none;
+    }
+
+    #success-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background-color: #f0fdf4;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+.modal-content h2 {
+  color: #166534;
+  margin-bottom: 1rem;
+}
+.modal-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+.modal-content button {
+  background-color: #10b981;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.modal-content button:hover {
+  background-color: #059669;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Adopt a Meal</h1>
+    <p>Join the movement to feed the needy through crowdfunding</p>
+  </header>
+  <div class="container">
+    <div class="intro">
+      <h2>What is Adopt a Meal?</h2>
+      <p>"Adopt a Meal" is a compassionate crowdfunding initiative that allows individuals and groups to sponsor meals for those in need. Your small contribution can make a huge impact in someone's life.</p>
+    </div>
+
+    <div class="donation-form">
+      <h2>Contribute a Meal</h2>
+      <form id="donation-form">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="amount">Donation Amount (INR)</label>
+        <input type="number" id="amount" name="amount" min="1" required />
+
+        <label for="payment-method">Payment Method</label>
+        <select id="payment-method" name="payment-method" required>
+          <option value="">-- Select Payment Method --</option>
+          <option value="upi">UPI</option>
+          <option value="netbanking">Net Banking</option>
+          <option value="card">Credit/Debit Card</option>
+        </select>
+
+        <label for="whatsapp">WhatsApp Number (for updates)</label>
+        <input type="text" id="whatsapp" name="whatsapp" placeholder="e.g., 9876543210" required />
+
+        <label for="message">Message (Optional)</label>
+        <textarea id="message" name="message" rows="4"></textarea>
+
+        <button type="submit">Donate Now</button>
+      </form>
+
+      <div id="success-modal" style="display: none;">
+        <div class="modal-content">
+          <h2>You're amazing! 🌟</h2>
+          <p>Thank you for adopting a meal. We'll send you heartwarming images and videos as the food is donated. 💚</p>
+          <button id="close-modal">Close</button>
+        </div>
+      </div>
+      
+
+      <div class="payment-info">
+        <h3>Prefer Google Pay / UPI?</h3>
+        <p>You can directly donate using this UPI ID:</p>
+        <p><code>debashishkar2004@okicici (7679626336)</code></p>
+        <div class="qr-code">
+          <p>Scan this QR code to pay:</p>
+          <img src="qr-code.jpg" alt="UPI QR Code">
+        </div>
+      </div>
+
+      
+    </div>
+
+    
+
+    <div class="testimonials">
+      <h3>What Our Supporters Say</h3>
+      <div class="testimonial-item">
+        <p>"Adopting a meal was the easiest way to help others in need. I feel connected to a community." - <strong>Debashis</strong></p>
+      </div>
+      <div class="testimonial-item">
+        <p>"A great initiative. Happy to be part of the change." - <strong>Sambhav</strong></p>
+      </div>
+    </div>
+
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Adopt a Meal. All rights reserved. | <a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('donation-form');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value.trim());
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+
+      if (!name || isNaN(amount) || amount < 1 || !whatsapp) {
+        alert('Please fill all required fields correctly.');
+        return;
+      }
+
+      try {
+  const response = await fetch('http://localhost:3000/donors', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, amount, whatsapp })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Server error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  console.log('Response:', data);
+
+  // Show success modal
+  document.getElementById('success-modal').style.display = 'flex';
+
+  // Reset form
+  document.getElementById('donation-form').reset();
+
+  // PDF receipt generation
+  fetch('http://localhost:3001/generate-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, amount, whatsapp }),
+  })
+  .then((pdfRes) => pdfRes.blob())
+  .then((blob) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${name}_receipt.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  })
+;
+
+} catch (error) {
+  console.error('Donation Error:', error);
+  alert('Something went wrong. Please try again.');
+}
+    });
+
+  </script>
+</body>
+</html> 
