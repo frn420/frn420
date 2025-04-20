@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency Meal Donations</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fff3e0);
+      padding: 40px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00695c;
+      margin-bottom: 30px;
+    }
+
+    .donation-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .donation-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      width: 300px;
+      animation: slideIn 0.4s ease-in-out;
+    }
+
+    .donation-card h3 {
+      margin-top: 0;
+      color: #d32f2f;
+    }
+
+    .donation-card p {
+      margin: 5px 0;
+      font-size: 0.95rem;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      font-weight: bold;
+      color: #00796b;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>Emergency Meal Donations</h2>
+  <div class="donation-list" id="donationList"></div>
+
+  <a href="donate_form.html" class="back-link">← Submit Another Donation</a>
+
+  <script>
+    const donations = JSON.parse(localStorage.getItem("donations")) || [];
+    const listContainer = document.getElementById("donationList");
+
+    if (donations.length === 0) {
+      listContainer.innerHTML = "<p>No donations yet. Be the first to donate!</p>";
+    } else {
+      donations.forEach(donation => {
+        const card = document.createElement("div");
+        card.className = "donation-card";
+        card.innerHTML = `
+          <h3>${donation.name}</h3>
+          <p><strong>Phone:</strong> ${donation.phone}</p>
+          <p><strong>Email:</strong> ${donation.email}</p>
+          <p><strong>Location:</strong> ${donation.location}</p>
+          <p><strong>Food Type:</strong> ${donation.foodType}</p>
+          <p><strong>Quantity:</strong> ${donation.quantity}</p>
+          <p><strong>Available From:</strong> ${donation.availableFrom}</p>
+          <p><strong>Expiry:</strong> ${donation.expiry || 'N/A'}</p>
+          <p><strong>Recurring:</strong> ${donation.recurring}</p>
+          <p><strong>Donation Type:</strong> ${donation.donationType}</p>
+          <p><strong>Packaged:</strong> ${donation.packaged}</p>
+          <p><strong>Comments:</strong> ${donation.comments || 'None'}</p>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
