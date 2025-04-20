@@ -94,6 +94,14 @@ def create_donation():
 def my_donations():
     return render_template('my_doantions.html')
 
+@app.route('/pickup')
+def pickup():
+    return render_template('pickup.html')
+
+@app.route('/match.html')
+def match():
+    return render_template('match.html')
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))  # Use the PORT environment variable or default to 5000
