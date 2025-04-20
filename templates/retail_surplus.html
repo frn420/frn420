@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -373,3 +374,380 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Retail Surplus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
+      color: #4e342e;
+      padding: 40px 20px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #558b2f;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6d4c41;
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 10px 14px;
+      border: 1px solid #aed581;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .toggle-view,
+    .toggle-dark {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #8bc34a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .toggle-view:hover,
+    .toggle-dark:hover {
+      background-color: #689f38;
+    }
+
+    .surplus-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .surplus-card {
+      background: #ffffff;
+      border: 2px solid #c5e1a5;
+      border-radius: 16px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 6px 12px rgba(139, 195, 74, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .surplus-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .surplus-card h3 {
+      color: #558b2f;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      background: #aed581;
+      color: #33691e;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-right: 5px;
+    }
+
+    .progress {
+      background: #f1f8e9;
+      border-radius: 10px;
+      height: 10px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #aed581;
+    }
+
+    .info {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: #5d4037;
+    }
+
+    .surplus-card button {
+      width: 100%;
+      background: #8bc34a;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .surplus-card button:hover {
+      background: #689f38;
+    }
+
+    .load-more {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .load-more button {
+      background-color: #8bc34a;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .load-more button:hover {
+      background-color: #689f38;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background: #8bc34a;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* 🔄 Dark mode */
+    body.dark-mode {
+      background: #263238;
+      color: #ffffff;
+    }
+
+    body.dark-mode .surplus-card {
+      background: #37474f;
+      border-color: #607d8b;
+      color: #eceff1;
+    }
+
+    body.dark-mode .modal-content {
+      background: #455a64;
+      color: white;
+    }
+
+    body.list-view .surplus-container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    body.list-view .surplus-card {
+      width: 90%;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Retail Surplus</h1>
+  <p class="subtitle">Explore surplus inventory available from participating food retailers 🛒</p>
+
+  <div class="controls">
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search items..." oninput="filterCards()" />
+      <select id="categoryFilter" onchange="filterCards()">
+        <option value="">All Categories</option>
+        <option value="produce">Produce</option>
+        <option value="dairy">Dairy</option>
+        <option value="bakery">Bakery</option>
+        <option value="canned">Canned</option>
+        <option value="frozen">Frozen</option>
+      </select>
+      <select id="sortQuantity" onchange="filterCards()">
+        <option value="">Sort by Quantity</option>
+        <option value="asc">Lowest First</option>
+        <option value="desc">Highest First</option>
+        <option value="expirySoonest">Expiry Soonest</option>
+        <option value="expiryLatest">Expiry Latest</option>
+      </select>
+    </div>
+    <button class="toggle-view" onclick="toggleView()">Toggle View</button>
+    <button class="toggle-dark" onclick="toggleDarkMode()">Dark Mode</button>
+  </div>
+
+  <div class="surplus-container" id="surplusContainer"></div>
+
+  <div class="load-more">
+    <button onclick="loadMore()">Load More</button>
+  </div>
+
+  <footer>
+    © 2025 Food Rescue Network - Retail Surplus
+  </footer>
+
+  <div class="modal" id="requestModal">
+    <div class="modal-content">
+      <h2>Request Sent!</h2>
+      <p id="modalItemName">Your request has been submitted.</p>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { name: "Fresh Produce Bundle", category: "produce", quantity: 20, expiry: "2 days", description: "Assorted fruits & vegetables", tags: ["Urgent"] },
+      { name: "Dairy Products", category: "dairy", quantity: 30, expiry: "3 days", description: "Milk, cheese, yogurt", tags: [] },
+      { name: "Bread & Baked Goods", category: "bakery", quantity: 50, expiry: "1 day", description: "Bread, rolls, pastries", tags: ["Urgent"] },
+      { name: "Canned & Packaged Items", category: "canned", quantity: 100, expiry: "60 days", description: "Canned goods", tags: [] },
+      { name: "Frozen Meals", category: "frozen", quantity: 40, expiry: "30 days", description: "Microwave-ready meals", tags: ["Frozen"] },
+      { name: "Frozen Vegetables", category: "frozen", quantity: 25, expiry: "45 days", description: "Frozen peas, corn, etc.", tags: ["Frozen"] }
+    ];
+
+    let visibleItems = 4;
+    let isListView = false;
+
+    function renderCards() {
+      const container = document.getElementById('surplusContainer');
+      container.innerHTML = '';
+      const filtered = getFilteredSortedItems();
+      const displayed = filtered.slice(0, visibleItems);
+      displayed.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'surplus-card';
+        const expiryDate = formatExpiryDate(item.expiry);
+        card.innerHTML = `
+          <h3>${item.name}</h3>
+          <div>${item.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}</div>
+          <p>${item.description}</p>
+          <div class="progress"><div class="progress-bar" style="width: ${item.quantity}%"></div></div>
+          <div class="info">Quantity: ${item.quantity}<br>Expires on: ${expiryDate}</div>
+          <button onclick="openModal('${item.name}')">Request</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function parseDays(expiry) {
+      const match = expiry.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) : Infinity;
+    }
+
+    function formatExpiryDate(expiry) {
+      const days = parseDays(expiry);
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.toLocaleDateString();
+    }
+
+    function getFilteredSortedItems() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const sort = document.getElementById('sortQuantity').value;
+
+      let filtered = items.filter(i =>
+        i.name.toLowerCase().includes(search) &&
+        (!category || i.category === category)
+      );
+
+      if (sort === 'asc') {
+        filtered.sort((a, b) => a.quantity - b.quantity);
+      } else if (sort === 'desc') {
+        filtered.sort((a, b) => b.quantity - a.quantity);
+      } else if (sort === 'expirySoonest') {
+        filtered.sort((a, b) => parseDays(a.expiry) - parseDays(b.expiry));
+      } else if (sort === 'expiryLatest') {
+        filtered.sort((a, b) => parseDays(b.expiry) - parseDays(a.expiry));
+      }
+
+      return filtered;
+    }
+
+    function loadMore() {
+      visibleItems += 2;
+      renderCards();
+    }
+
+    function filterCards() {
+      visibleItems = 4;
+      renderCards();
+    }
+
+    function openModal(itemName) {
+      document.getElementById('modalItemName').textContent = `Your request for "${itemName}" has been submitted.`;
+      document.getElementById('requestModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('requestModal').style.display = 'none';
+    }
+
+    function toggleView() {
+      isListView = !isListView;
+      document.body.classList.toggle('list-view', isListView);
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    renderCards();
+  </script>
+</body>
+</html>
+>>>>>>> 8ed298e (op)

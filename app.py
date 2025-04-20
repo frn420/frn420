@@ -109,6 +109,50 @@ def ngo_listings():
 @app.route('/biofertilizer_listings.html')
 def biofertilizer_listings():
     return render_template('biofertilizer_listings.html')
+
+@app.route('/receiver.html')
+def receiver():
+    return render_template('receiver.html')
+
+@app.route('/biofertilizer.html')
+def biofertilizer():
+    return render_template('biofertilizer.html')
+
+@app.route('/apply.html')
+def apply():
+    return render_template('apply.html')
+
+@app.route('/retail_surplus.html')
+def retail_surplus():
+    return render_template('retail_surplus.html')
+
+@app.route('/donation_guidelines.html')
+def donation_guidelines():
+    return render_template('donation_guidelines.html')
+
+@app.route('/emergency.html')
+def emergency():
+    return render_template('emergency.html')
+
+@app.route('/donate_form.html')
+def donate_form():
+    return render_template('donate_form.html')
+
+@app.route('/emergency_donation_dashboard.html')
+def emergency_donation_dashboard():
+    return render_template('emergency_donation_dashboard.html')
+
+@app.route('/request_food_aid.html')
+def request_food_aid():
+    return render_template('request_food_aid.html')
+
+@app.route('/request_dashboard.html')
+def request_dashboard():
+    return render_template('request_dashboard.html')
+
+@app.route('/adopt_a_meal.html')
+def adopt_a_meal():
+    return render_template('adopt_a_meal.html')
     
 if __name__ == "__main__":
     import os

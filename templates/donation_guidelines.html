@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,3 +168,174 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Donation Guidelines</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e8f5e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .guidelines-container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2e7d32;
+      font-size: 28px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #c8e6c9;
+      cursor: pointer;
+      padding: 18px 0;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      font-size: 16px;
+      color: #555;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="guidelines-container">
+    <h2>Donation Guidelines</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        1. Donate Fresh and Safe Food
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Only donate food that is fresh, properly stored, and within its expiry date. Avoid perishable items that require refrigeration unless specified.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        2. Proper Packaging
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Use clean, sealed containers or eco-friendly packaging to prevent contamination and ensure safe transportation.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        3. Labeling is Important
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Label the donation with important details like type of food, date of preparation, and any allergens (nuts, dairy, etc.).</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        4. Coordinate Before Donating
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Please contact our team in advance to ensure proper collection and avoid food wastage due to scheduling issues.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        5. Respect Hygiene Protocols
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">All food should be prepared and handled in a hygienic environment. Use gloves, hairnets, and sanitized utensils during preparation.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        6. No Expired or Spoiled Items
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Do not donate any food that is spoiled, expired, or questionable in terms of safety and quality.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        7. Separate Veg and Non-Veg
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Clearly separate vegetarian and non-vegetarian items and label them appropriately to respect dietary restrictions.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        8. Inform About Quantity
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Mention the approximate quantity of food you are donating to help us plan distribution better.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        9. Timely Delivery
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Please ensure the food is donated within the appropriate time window to avoid spoilage and ensure freshness.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        10. Follow Local Guidelines
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Follow any local regulations and community guidelines related to food safety and donation practices.</div>
+    </div>
+
+  </div>
+
+  <script>
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
+>>>>>>> 8ed298e (op)
