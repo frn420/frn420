@@ -36,17 +36,22 @@ transform = transforms.Compose([
                          std=[0.229, 0.224, 0.225])
 ])
 
-def predict_nutrients(image_path):
-    # Load and preprocess the image
-    image = Image.open(image_path).convert('RGB')
-    image = transform(image).unsqueeze(0)  # Add batch dimension
+def predict_nutrients(filepath):
+    try:
+        # Load the image
+        image = Image.open(filepath).convert('RGB')
+        image = transform(image).unsqueeze(0)  # Add batch dimension
 
-    # Perform inference
-    with torch.no_grad():
-        outputs = model(image)
-        _, predicted_idx = outputs.max(1)
-        food_name = food_classes[predicted_idx.item()]
+        # Perform inference
+        with torch.no_grad():
+            outputs = model(image)
+            _, predicted_idx = outputs.max(1)
+            food_name = food_classes[predicted_idx.item()]
 
-    # Get nutrient data
-    nutrients = sample_nutrients.get(food_name, default_nutrients)
-    return food_name, nutrients
+        # Get nutrient data
+        nutrients = sample_nutrients.get(food_name, default_nutrients)
+        return food_name, nutrients
+
+    except Exception as e:
+        print(f"Error in predict_nutrients: {e}")
+        return "Unknown", default_nutrients

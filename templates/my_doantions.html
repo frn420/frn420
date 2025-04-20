@@ -19,17 +19,17 @@
     }
 
     .donation {
-      gap:30px;
-      grid-template-rows: repeat(2, 1fr);
+      gap: 30px;
       justify-content: center;
       background: white;
       padding: 25px;
-      width: 300px;
+      width: 500px;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       border-left: 8px solid #38a169;
+      flex-shrink: 0;
     }
 
     .donation:hover {
@@ -82,18 +82,18 @@
     }
 
     .row {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-bottom: 30px;
-}
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
 
-.donation {
-  width: 500px;
-  flex-shrink: 0;
-}
-
-
+    img.food-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -107,7 +107,7 @@
   if (donations.length === 0) {
     donationList.innerHTML = "<p>No donations yet.</p>";
   } else {
-    donations.reverse(); // Optional, if you want latest on top
+    donations.reverse();
 
     for (let i = 0; i < donations.length; i += 2) {
       const row = document.createElement("div");
@@ -118,18 +118,31 @@
         const div = document.createElement("div");
         div.className = "donation";
         div.innerHTML = `
-          <h3>Donation #${donations.length - j}</h3>
-          <p><strong>Name:</strong> <span class="highlight">${donation.contactName}</span></p>
-          <p><strong>Food Type:</strong> ${donation.foodType}</p>
-          <p><strong>Quantity:</strong> ${donation.quantity}</p>
-          <p><strong>Expiry:</strong> ${donation.expiry}</p>
-          <p><strong>Location:</strong> ${donation.location}</p>
-          <p><strong>Category:</strong> ${donation.foodCategory}</p>
-          <p><strong>Storage:</strong> ${donation.storage}</p>
-          <p><strong>Contact:</strong> ${donation.contactPhone}</p>
-          <p><strong>Notes:</strong> ${donation.notes || 'None'}</p>
-          <p><small>Submitted: ${new Date(donation.timestamp).toLocaleString()}</small></p>
-          <button class="button" onclick="window.location.href='pickup.html?donationId=${donations.length - j}'">Schedule Pickup</button>
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div>
+              <h3>Donation #${donations.length - j}</h3>
+              <p><strong>Name:</strong> <span class="highlight">${donation.contactName}</span></p>
+              <p><strong>Food Type:</strong> ${donation.foodType}</p>
+              <p><strong>Quantity:</strong> ${donation.quantity}</p>
+              <p><strong>Expiry:</strong> ${donation.expiry}</p>
+              <p><strong>Location:</strong> ${donation.location}</p>
+              <p><strong>Category:</strong> ${donation.foodCategory}</p>
+              <p><strong>Storage:</strong> ${donation.storage}</p>
+              <p><strong>Contact:</strong> ${donation.contactPhone}</p>
+              <p><strong>Notes:</strong> ${donation.notes || 'None'}</p>
+              <p><small>Submitted: ${new Date(donation.timestamp).toLocaleString()}</small></p>
+              <button class="button" onclick="window.location.href='pickup.html?donationId=${donations.length - j}'">Available Pickups</button>
+            </div>
+            <div>
+              <img src="${donation.imageUrl || 'https://via.placeholder.com/120'}" alt="Food Image" class="food-image" style="margin-left: 69px; margin-top: 16px;">
+              <div style="margin-top: 10px; margin-left: 69px;">
+                <p><strong>Calories:</strong> ${donation.nutrients?.Calories || 'N/A'}</p>
+                <p><strong>Protein:</strong> ${donation.nutrients?.Protein || 'N/A'}</p>
+                <p><strong>Carbs:</strong> ${donation.nutrients?.Carbs || 'N/A'}</p>
+                <p><strong>Fats:</strong> ${donation.nutrients?.Fats || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
         `;
         row.appendChild(div);
       }
@@ -137,7 +150,6 @@
       donationList.appendChild(row);
     }
   }
-
   </script>
 </body>
 </html>

@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Food Nutrient Detector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Prediction Results</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        img { margin-top: 20px; max-width: 100%; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin: 20px; 
+            background-color: #f0fdf4;
+        }
+        h1 {
+            color: #2f855a;
+        }
+        .results-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .image-container, .results {
+            width: 400px;
+            height: 250px;
+            box-sizing: border-box;
+        }
+        .results {
+            padding: 20px;
+            border: 2px solid #22543d;
+            border-radius: 25px;
+            background-color: #f9f9f9;
+            text-align: left;
+        }
         .button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -14,6 +49,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
         .button:hover {
             background-color: #45a049;
@@ -21,33 +58,32 @@
     </style>
 </head>
 <body>
-    <h1>Food Donation Details</h1>
+    <h1>Food Prediction Results</h1>
 
-    {% if result %}
-        <hr>
-        <h2>Uploaded Image:</h2>
-        <img src="{{ result.image_url }}" alt="Uploaded Food" width="300">
-
-        <h2>Prediction: {{ result.food }}</h2>
-        <p><strong>Calories:</strong> {{ result.nutrients['Calories'] }}</p>
-        <p><strong>Protein:</strong> {{ result.nutrients['Protein'] }}</p>
-        <p><strong>Carbs:</strong> {{ result.nutrients['Carbs'] }}</p>
-        <p><strong>Fats:</strong> {{ result.nutrients['Fats'] }}</p>
-
-        <h3 style="color: green;">{{ result.message }}</h3>
+    {% if food and nutrients %}
+    <div class="results-container">
+        <div class="image-container">
+            <img src="{{ image_url }}" alt="Uploaded Food Image">
+        </div>
+        <div class="results">
+            <p><strong>Food Name:</strong> {{ food }}</p>
+            <p><strong>Calories:</strong> {{ nutrients.Calories }}</p>
+            <p><strong>Protein:</strong> {{ nutrients.Protein }}</p>
+            <p><strong>Carbs:</strong> {{ nutrients.Carbs }}</p>
+            <p><strong>Fats:</strong> {{ nutrients.Fats }}</p>
+        </div>
+    </div>
     {% else %}
-        <p style="color: red;">No results available. Please try again.</p>
+    <p>No results available. Please try again.</p>
     {% endif %}
 
-    <!-- Buttons for Home and Dashboard -->
-    <button class="button" onclick="goToDashboard()">Back to Donor Dashboard</button>
-    
+    <!-- Submit Button -->
+    <button class="button" onclick="redirectToMyDonations()">Submit</button>
 
     <script>
-        function goToDashboard() {
-            window.location.href = "/donor.html"; // Redirect to the Donor Dashboard
+        function redirectToMyDonations() {
+            window.location.href = "my_doantions.html"; // Redirect to My Donations page
         }
-
     </script>
 </body>
 </html>

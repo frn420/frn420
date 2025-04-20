@@ -19,7 +19,7 @@ def signup():
 
 @app.route('/login.html', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    if request.method == 'POST': 
         # Perform login logic here
         return redirect(url_for('home'))  # Redirect to the homepage after login
     return render_template('login.html')
@@ -28,37 +28,38 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/food-predictor', methods=['GET', 'POST'])
+@app.route('/food-predictor', methods=['POST'])
 def food_predictor():
-    if request.method == 'POST':
-        # Handle file upload and prediction logic
-        if 'food_image' not in request.files:
-            return "No file part", 400
+    if 'food_image' not in request.files:
+        return jsonify({"error": "No file part"}), 400
 
-        file = request.files['food_image']
-        if file.filename == '':
-            return "No selected file", 400
+    file = request.files['food_image']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
 
-        if file:
-            # Save the uploaded file
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+    if file:
+        # Save the uploaded file
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
 
-            # Call the food predictor function
-            food_name, nutrients = predict_nutrients(filepath)
+        # Call the food predictor function
+        food_name, nutrients = predict_nutrients(filepath)
 
-            # Render the results in a template
-            return render_template(
-                'food_predictor.html',
-                result={
-                    'image_url': url_for('static', filename=f'uploads/{filename}'),
-                    'food': food_name,
-                    'nutrients': nutrients,
-                    'message': f"Your {food_name} is ready for donation!"
-                }
-            )
-    return render_template('food_predictor.html')  # For GET requests
+        # Render the food_predictor.html page with the prediction results
+        rendered_html = render_template(
+            'food_predictor.html',
+            food=food_name,
+            nutrients=nutrients,
+            image_url=url_for('static', filename=f'uploads/{filename}')
+        )
+
+        # Return the nutrient data, image URL, and rendered HTML as JSON
+        return jsonify({
+            "image_url": url_for('static', filename=f'uploads/{filename}'),
+            "nutrients": nutrients,
+            "html": rendered_html
+        })
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():

@@ -306,8 +306,8 @@
             <i class="fas fa-tags"></i>
             <select id="foodCategory" name="foodCategory" required>
               <option value="">Select Category</option>
-              <option value="perishable">Edible</option>
-              <option value="nonperishable">Not Edible</option>
+              <option value="Edible">Edible</option>
+              <option value="Not Edible">Not Edible</option>
             </select>
           </div>
         </div>
@@ -352,13 +352,8 @@
         <textarea id="notes" name="notes" rows="4" placeholder="Any storage instructions, allergies, or pickup info?"></textarea>
       </div>
 
-      <div>
-        <!-- AI Nutrients Predictor Button -->
-        <button type="button" id="predictNutrientsButton" class="ai-button">AI Nutrients Predictor</button>
-      </div>
-
       <!-- Submit Donation Button -->
-      <button type="submit" id="submitDonationButton">Submit Donation</button>
+      <button type="submit" id="submitDonationButton">Submit & AI Nutrients Predictor</button>
       <div class="back-link" onclick="goBack()">&larr; Back to Dashboard</div>
     </form>
   </div>
@@ -368,45 +363,55 @@
         window.location.href = "dashboard.html"; // Redirect to the donor dashboard
     }
 
-    // Redirect to the AI Nutrients Predictor app and submit the form
-    document.getElementById("predictNutrientsButton").addEventListener("click", function () {
-        // Set the form action, method, and enctype
-        const form = document.getElementById("donationForm");
-        form.action = "/food-predictor";
-        form.method = "POST";
-        form.enctype = "multipart/form-data"; // Required for file uploads
-        form.submit(); // Submit the form
-    });
-
-    // Handle form submission for storing data in localStorage
+    // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
     document.getElementById("donationForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const formData = {
-            foodType: document.getElementById("foodType").value,
-            foodPreference: document.getElementById("foodPreference").value,
-            quantity: document.getElementById("quantity").value,
-            expiry: document.getElementById("expiry").value,
-            location: document.getElementById("location").value,
-            foodCategory: document.getElementById("foodCategory").value,
-            storage: document.getElementById("storage").value,
-            contactName: document.getElementById("contactName").value,
-            contactPhone: document.getElementById("contactPhone").value,
-            notes: document.getElementById("notes").value,
-            timestamp: new Date().toISOString()
-        };
+        const form = document.getElementById("donationForm");
+        const formData = new FormData(form);
 
-        // Load previous donations
-        const previousData = JSON.parse(localStorage.getItem("donations")) || [];
+        // Submit the form to the backend
+        fetch("/food-predictor", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Expecting JSON response
+        })
+        .then(result => {
+            // Save donation data in localStorage
+            const donationData = {
+                foodType: document.getElementById("foodType").value,
+                foodPreference: document.getElementById("foodPreference").value,
+                quantity: document.getElementById("quantity").value,
+                expiry: document.getElementById("expiry").value,
+                location: document.getElementById("location").value,
+                foodCategory: document.getElementById("foodCategory").value,
+                storage: document.getElementById("storage").value,
+                contactName: document.getElementById("contactName").value,
+                contactPhone: document.getElementById("contactPhone").value,
+                notes: document.getElementById("notes").value,
+                imageUrl: result.image_url, // Save the image URL returned by the backend
+                nutrients: result.nutrients, // Save the nutrient data returned by the backend
+                timestamp: new Date().toISOString()
+            };
 
-        // Add new donation
-        previousData.push(formData);
+            const previousData = JSON.parse(localStorage.getItem("donations")) || [];
+            previousData.push(donationData);
+            localStorage.setItem("donations", JSON.stringify(previousData));
 
-        // Save updated array
-        localStorage.setItem("donations", JSON.stringify(previousData));
-
-        alert("Donation submitted successfully!");
-        window.location.href = "my_doantions.html";
+            // Redirect to food_predictor.html with the prediction results
+            document.open();
+            document.write(result.html); // Assuming the backend returns HTML content
+            document.close();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert(`An error occurred while submitting the donation: ${error.message}`);
+        });
     });
   </script>
 </body>
