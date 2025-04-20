@@ -40,6 +40,7 @@
       font-size: 1.8rem;
       color: #4caf50;
       font-weight: 700;
+      cursor: pointer; /* Makes the title clickable */
     }
 
     nav {
@@ -53,11 +54,13 @@
       color: #4caf50;
       padding: 0.5rem 1.2rem;
       border-radius: 8px;
-      transition: background 0.3s;
+      transition: background 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added shadow */
     }
 
     nav a:hover {
       background-color: #e8f5e9;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
     }
 
     .hero {
@@ -235,7 +238,7 @@
 
 <body>
   <header>
-    <h1>Food Rescue Network</h1>
+    <h1 onclick="window.location.href='/'" style="cursor: pointer;">Food Rescue Network</h1>
     <nav id="navLinks"></nav>
   </header>
 
