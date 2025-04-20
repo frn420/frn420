@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Request Food Aid</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffe0b2, #ffccbc);
+      padding: 40px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00695c;
+      margin-bottom: 30px;
+    }
+
+    .request-form {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .request-form input[type="text"], .request-form input[type="email"], .request-form textarea, .request-form select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f9f9f9;
+    }
+
+    .request-form button {
+      background-color: #d32f2f;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .request-form button:hover {
+      background-color: #b71c1c;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      font-weight: bold;
+      color: #00796b;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Request Food Aid</h2>
+
+  <div class="request-form">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" placeholder="Enter your full name" required>
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="Enter your email" required>
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" placeholder="Enter your phone number" required>
+
+    <label for="location">Location (City, Region)</label>
+    <input type="text" id="location" placeholder="Enter your location" required>
+
+    <label for="aid-type">Type of Request</label>
+    <select id="aid-type" required>
+      <option value="Emergency Relief">Emergency Relief</option>
+      <option value="Food Security">Food Security</option>
+      <option value="Child Nutrition">Child Nutrition</option>
+      <option value="Disaster Relief">Disaster Relief</option> 
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="organization-type">Are you a:</label>
+    <select id="organization-type" required>
+      <option value="Individual">Individual</option>
+      <option value="NGO">NGO</option>
+      <option value="Government Official">Government Official</option>
+    </select>
+
+    <label for="comments">Additional Comments</label>
+    <textarea id="comments" rows="5" placeholder="Please provide any additional details or requests." required></textarea>
+
+    <!-- Changed the button to type="button" to prevent form submission -->
+    <button type="button" onclick="submitRequest()">Submit Request</button>
+  </div>
+
+  <a href="donate.html" class="back-link">← Back to Donation Page</a>
+
+  <script>
+    function submitRequest() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const location = document.getElementById('location').value;
+      const aidType = document.getElementById('aid-type').value;
+      const organizationType = document.getElementById('organization-type').value;
+      const comments = document.getElementById('comments').value;
+
+      if (name && email && phone && location && aidType && organizationType && comments) {
+        const requestData = {
+          name: name,
+          email: email,
+          phone: phone,
+          location: location,
+          aidType: aidType,
+          organizationType: organizationType,
+          comments: comments,
+        };
+
+        // Save the request data to localStorage for demo purposes
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
+        requests.push(requestData);
+        localStorage.setItem("requests", JSON.stringify(requests));
+
+        alert("Your food aid request has been submitted successfully!");
+
+        // Redirect to request_dashboard.html after submission
+        window.location.href = "request_dashboard.html"; // Redirection happens here
+      } else {
+        alert("Please fill out all fields before submitting.");
+      }
+    }
+  </script>
+
+</body>
+</html>
+
