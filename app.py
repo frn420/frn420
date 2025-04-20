@@ -93,5 +93,7 @@ def create_donation():
 def my_donations():
     return render_template('my_doantions.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Use the PORT environment variable or default to 5000
+    app.run(host="0.0.0.0", port=port)  # Bind to 0.0.0.0 to make it accessible externally

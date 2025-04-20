@@ -19,11 +19,15 @@
     }
 
     .donation {
+      gap:30px;
+      grid-template-rows: repeat(2, 1fr);
+      justify-content: center;
       background: white;
-      padding: 24px;
+      padding: 25px;
+      width: 300px;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       border-left: 8px solid #38a169;
     }
@@ -77,6 +81,19 @@
       color: #718096;
     }
 
+    .row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.donation {
+  width: 500px;
+  flex-shrink: 0;
+}
+
+
   </style>
 </head>
 <body>
@@ -84,17 +101,24 @@
   <div id="donationList"></div>
 
   <script>
-    const donations = JSON.parse(localStorage.getItem("donations")) || [];
-    const donationList = document.getElementById("donationList");
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  const donationList = document.getElementById("donationList");
 
-    if (donations.length === 0) {
-      donationList.innerHTML = "<p>No donations yet.</p>";
-    } else {
-      donations.reverse().forEach((donation, index) => {
+  if (donations.length === 0) {
+    donationList.innerHTML = "<p>No donations yet.</p>";
+  } else {
+    donations.reverse(); // Optional, if you want latest on top
+
+    for (let i = 0; i < donations.length; i += 2) {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      for (let j = i; j < i + 2 && j < donations.length; j++) {
+        const donation = donations[j];
         const div = document.createElement("div");
         div.className = "donation";
         div.innerHTML = `
-          <h3>Donation #${donations.length - index}</h3>
+          <h3>Donation #${donations.length - j}</h3>
           <p><strong>Name:</strong> <span class="highlight">${donation.contactName}</span></p>
           <p><strong>Food Type:</strong> ${donation.foodType}</p>
           <p><strong>Quantity:</strong> ${donation.quantity}</p>
@@ -105,11 +129,15 @@
           <p><strong>Contact:</strong> ${donation.contactPhone}</p>
           <p><strong>Notes:</strong> ${donation.notes || 'None'}</p>
           <p><small>Submitted: ${new Date(donation.timestamp).toLocaleString()}</small></p>
-          <button class="button" onclick="window.location.href='pickup.html?donationId=${donations.length - index}'">Schedule Pickup</button>
+          <button class="button" onclick="window.location.href='pickup.html?donationId=${donations.length - j}'">Schedule Pickup</button>
         `;
-        donationList.appendChild(div);
-      });
+        row.appendChild(div);
+      }
+
+      donationList.appendChild(row);
     }
+  }
+
   </script>
 </body>
 </html>
