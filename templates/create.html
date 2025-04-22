@@ -393,7 +393,6 @@
 
       <!-- Submit Donation Button -->
       <button type="submit" id="submitDonationButton">Submit & AI Nutrients Predictor</button>
-      <button type="submit" id="submitDonationButton">Submit & AI Nutrients Predictor</button>
       <div class="back-link" onclick="goBack()">&larr; Back to Dashboard</div>
     </form>
   </div>
@@ -408,7 +407,6 @@
         window.location.href = "dashboard.html"; // Redirect to the donor dashboard
     }
 
-    // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
     // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
     document.getElementById("donationForm").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -449,9 +447,6 @@
                 timestamp: new Date().toISOString()
             };
 
-            const previousData = JSON.parse(localStorage.getItem("donations")) || [];
-            previousData.push(donationData);
-            localStorage.setItem("donations", JSON.stringify(previousData));
             const previousData = JSON.parse(localStorage.getItem("donations")) || [];
             previousData.push(donationData);
             localStorage.setItem("donations", JSON.stringify(previousData));
