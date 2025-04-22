@@ -40,7 +40,7 @@
       font-size: 1.8rem;
       color: #4caf50;
       font-weight: 700;
-      cursor: pointer; /* Makes the title clickable */
+      cursor: pointer;
     }
 
     nav {
@@ -55,12 +55,12 @@
       padding: 0.5rem 1.2rem;
       border-radius: 8px;
       transition: background 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added shadow */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     nav a:hover {
       background-color: #e8f5e9;
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     }
 
     .hero {
@@ -110,7 +110,6 @@
       font-size: 1.1rem;
       cursor: pointer;
       animation: fadeInUp 1.4s ease-in-out;
-
     }
 
     .hero button:hover {
@@ -215,6 +214,41 @@
       background-color: #2e7d32;
     }
 
+    .emergency {
+      background-color: #ffebee;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: 1.5rem;
+      margin: 4rem auto;
+      max-width: 900px;
+    }
+
+    .emergency h3 {
+      font-size: 2rem;
+      color: #c62828;
+      margin-bottom: 1rem;
+    }
+
+    .emergency p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #b71c1c;
+    }
+
+    .emergency button {
+      background-color: #d32f2f;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .emergency button:hover {
+      background-color: #b71c1c;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -245,7 +279,7 @@
   <section class="hero">
     <h2>One click. One meal. Infinite impact.</h2>
     <p>Be a part of the revolution to reduce food waste and nourish communities in need.</p>
-    <button onclick="window.location.href='signup.html'">Donate Now</button>
+    <div id="heroButtons"></div>
   </section>
 
   <section class="taglines">
@@ -277,6 +311,12 @@
     </div>
   </section>
 
+  <section class="emergency">
+    <h3>Emergency Food Relief</h3>
+    <p>In times of crisis, every moment matters. Access urgent food support or contribute to relief efforts during natural disasters, pandemics, and more.</p>
+    <button onclick="window.location.href='emergency.html'">Access Relief</button>
+  </section>
+
   <section class="cta">
     <h3>So What are you waiting for?</h3>
     <h2>Make an Impact Today!</h2>
@@ -289,6 +329,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const nav = document.getElementById("navLinks");
+      const heroButtons = document.getElementById("heroButtons");
       const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
       if (user && user.name) {
@@ -296,11 +337,19 @@
           <a href="#">👤 ${user.name}</a>
           <a href="#" onclick="logout()" style="color:red;">Logout</a>
         `;
+
+        heroButtons.innerHTML = `
+          <button onclick="window.location.href='dashboard.html'" style="background-color: #4caf50;">Dashboard</button>
+        `;
       } else {
         nav.innerHTML = `
           <a href="#">Home</a>
           <a href="login.html">Login</a>
           <a href="signup.html">Join Us</a>
+        `;
+
+        heroButtons.innerHTML = `
+          <button onclick="window.location.href='signup.html'" style="background-color: #4caf50;">Donate Now</button>
         `;
       }
     });
@@ -311,5 +360,4 @@
     }
   </script>
 </body>
-
 </html>

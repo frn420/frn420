@@ -138,7 +138,8 @@
 
       if (matchedUser) {
         alert("Login successful!");
-        window.location.href = "/dashboard.html";
+        localStorage.setItem("loggedInUser", JSON.stringify(matchedUser)); // Save logged-in user
+        window.location.href = "/"; // Redirect to homepage
       } else {
         alert("Invalid email or password.");
       }
