@@ -240,6 +240,42 @@
       0% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.3); }
       100% { box-shadow: 0 0 0 6px rgba(56, 161, 105, 0.15); }
     }
+
+    /* Add this CSS for the loading spinner */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #38a169;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
@@ -358,6 +394,11 @@
     </form>
   </div>
 
+  <!-- Add this loading overlay to the body -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
   <script>
     function goBack() {
         window.location.href = "dashboard.html"; // Redirect to the donor dashboard
@@ -366,6 +407,10 @@
     // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
     document.getElementById("donationForm").addEventListener("submit", function (e) {
         e.preventDefault();
+
+        // Show the loading overlay
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        loadingOverlay.classList.add("active");
 
         const form = document.getElementById("donationForm");
         const formData = new FormData(form);
@@ -411,6 +456,10 @@
         .catch(error => {
             console.error("Error:", error);
             alert(`An error occurred while submitting the donation: ${error.message}`);
+        })
+        .finally(() => {
+            // Hide the loading overlay after the process is complete
+            loadingOverlay.classList.remove("active");
         });
     });
   </script>
