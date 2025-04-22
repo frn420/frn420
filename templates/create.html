@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Donation | Food Rescue Network</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: row;
+      background: linear-gradient(to right, #1a202c 50%, #e6fffa 50%);
+    }
+
+    .left-panel {
+      background-image: url('/static/web_photo/112.jpg'); /* Replace with actual image path */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #edf2f7;
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeInLeft 1.2s ease;
+      position: relative;
+    }
+
+    .left-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(26, 32, 44, 0.6);
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .left-panel h1,
+    .left-panel p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .left-panel h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .left-panel p {
+      font-size: 1.1rem;
+      color: #ffffff;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .right-panel {
+      flex: 1;
+      overflow-y: auto;
+      height: 100vh;
+      padding: 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      animation: bounceIn 1.4s ease;
+    }
+
+    form {
+      background: #ffffffcc;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 700px;
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.7s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #2f855a;
+      font-size: 0.95rem;
+    }
+
+    .input-icon {
+      position: relative;
+    }
+
+    .input-icon i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #a0aec0;
+    }
+
+    .input-icon input,
+    .input-icon select,
+    .input-icon textarea {
+      padding-left: 40px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd5e0;
+      border-radius: 12px;
+      font-size: 1rem;
+      background-color: #f7fafc;
+      transition: all 0.3s ease;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #38a169;
+      outline: none;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 161, 105, 0.4);
+      animation: pulseFocus 0.8s infinite alternate;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .form-row > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: #38a169;
+      color: white;
+      padding: 16px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2f855a;
+      transform: scale(1.05);
+    }
+
+    .info-box {
+      background-color: #fefcbf;
+      padding: 15px 20px;
+      border-radius: 12px;
+      border-left: 5px solid #d69e2e;
+      font-size: 0.95rem;
+      color: #744210;
+    }
+
+    .back-link {
+      margin-top: 10px;
+      color: #2f855a;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .left-panel, .right-panel {
+        flex: none;
+        width: 100%;
+        padding: 20px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      form {
+        padding: 30px 20px;
+        gap: 20px;
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+
+    @keyframes pulseFocus {
+      0% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.3); }
+      100% { box-shadow: 0 0 0 6px rgba(56, 161, 105, 0.15); }
+    }
+  </style>
+</head>
+<body>
+  <div class="left-panel">
+    <h1>Create New Donation</h1>
+    <p>Fill out this form to submit a donation and make a difference in your community by sharing surplus food.</p>
+  </div>
+
+  <div class="right-panel">
+    <form id="donationForm" enctype="multipart/form-data">
+      <div class="info-box">
+        Please fill out all required fields accurately to help receivers understand the donation details.
+      </div>
+
+      <div>
+        <label for="foodType">Food Type</label>
+        <div class="input-icon">
+          <i class="fas fa-utensils"></i>
+          <input type="text" id="foodType" name="foodType" placeholder="e.g. Bread, Fruits, Cooked Rice" required />
+        </div>
+      </div>
+
+      <div>
+        <label for="foodPreference">Food Type (For Edible Food)</label>
+        <div class="input-icon">
+          <i class="fas fa-seedling"></i>
+          <select id="foodPreference" name="foodPreference" required>
+            <option value="">Select Type</option>
+            <option value="vegetarian">Veg</option>
+            <option value="nonvegetarian">Non-Veg</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="quantity">Quantity</label>
+          <div class="input-icon">
+            <i class="fas fa-balance-scale"></i>
+            <input type="text" id="quantity" name="quantity" placeholder="e.g. 10 kg, 5 packs" required />
+          </div>
+        </div>
+        <div>
+          <label for="expiry">Expiry Date</label>
+          <div class="input-icon">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="date" id="expiry" name="expiry" required />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="location">Pickup Location</label>
+        <div class="input-icon">
+          <i class="fas fa-map-marker-alt"></i>
+          <input type="text" id="location" name="location" placeholder="Enter address or area" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="foodCategory">Category</label>
+          <div class="input-icon">
+            <i class="fas fa-tags"></i>
+            <select id="foodCategory" name="foodCategory" required>
+              <option value="">Select Category</option>
+              <option value="Edible">Edible</option>
+              <option value="Not Edible">Not Edible</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="storage">Storage Requirement</label>
+          <div class="input-icon">
+            <i class="fas fa-snowflake"></i>
+            <select id="storage" name="storage" required>
+              <option value="">Select Storage Condition</option>
+              <option value="room">Room Temperature</option>
+              <option value="refrigerated">Refrigerated</option>
+              <option value="frozen">Frozen</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="contactName">Contact Name</label>
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="contactName" name="contactName" placeholder="Your Name" required />
+          </div>
+        </div>
+        <div>
+          <label for="contactPhone">Contact Phone</label>
+          <div class="input-icon">
+            <i class="fas fa-phone"></i>
+            <input type="number" id="contactPhone" name="contactPhone" placeholder="e.g. 9678667564" required />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="food_image">Upload Food Image:</label>
+        <input type="file" id="food_image" name="food_image" accept="image/*" required>
+      </div>
+
+      <div>
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" name="notes" rows="4" placeholder="Any storage instructions, allergies, or pickup info?"></textarea>
+      </div>
+
+      <!-- Submit Donation Button -->
+      <button type="submit" id="submitDonationButton">Submit & AI Nutrients Predictor</button>
+      <div class="back-link" onclick="goBack()">&larr; Back to Dashboard</div>
+    </form>
+  </div>
+
+  <script>
+    function goBack() {
+        window.location.href = "dashboard.html"; // Redirect to the donor dashboard
+    }
+
+    // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
+    document.getElementById("donationForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = document.getElementById("donationForm");
+        const formData = new FormData(form);
+
+        // Submit the form to the backend
+        fetch("/food-predictor", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Expecting JSON response
+        })
+        .then(result => {
+            // Save donation data in localStorage
+            const donationData = {
+                foodType: document.getElementById("foodType").value,
+                foodPreference: document.getElementById("foodPreference").value,
+                quantity: document.getElementById("quantity").value,
+                expiry: document.getElementById("expiry").value,
+                location: document.getElementById("location").value,
+                foodCategory: document.getElementById("foodCategory").value,
+                storage: document.getElementById("storage").value,
+                contactName: document.getElementById("contactName").value,
+                contactPhone: document.getElementById("contactPhone").value,
+                notes: document.getElementById("notes").value,
+                imageUrl: result.image_url, // Save the image URL returned by the backend
+                nutrients: result.nutrients, // Save the nutrient data returned by the backend
+                timestamp: new Date().toISOString()
+            };
+
+            const previousData = JSON.parse(localStorage.getItem("donations")) || [];
+            previousData.push(donationData);
+            localStorage.setItem("donations", JSON.stringify(previousData));
+
+            // Redirect to food_predictor.html with the prediction results
+            document.open();
+            document.write(result.html); // Assuming the backend returns HTML content
+            document.close();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert(`An error occurred while submitting the donation: ${error.message}`);
+        });
+    });
+  </script>
+</body>
+</html>
