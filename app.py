@@ -3,11 +3,16 @@ import os
 from werkzeug.utils import secure_filename
 from PIL import Image
 from food_predictor import predict_nutrients
+import redis
 
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Connect to Redis
+redis_url = "redis://default:uZZPqOodTVgZPFvrwGoXkwYvgFDOIDAI@redis.railway.internal:6379"
+r = redis.Redis.from_url(redis_url)
 
 @app.route('/')
 def home():
