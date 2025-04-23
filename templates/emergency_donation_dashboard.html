@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,10 +71,12 @@
     const donations = JSON.parse(localStorage.getItem("donations")) || [];
     const listContainer = document.getElementById("donationList");
 
-    if (donations.length === 0) {
+    const filteredDonations = donations.filter(donation => donation.source === "donate_form");
+
+    if (filteredDonations.length === 0) {
       listContainer.innerHTML = "<p>No donations yet. Be the first to donate!</p>";
     } else {
-      donations.forEach(donation => {
+      filteredDonations.forEach(donation => {
         const card = document.createElement("div");
         card.className = "donation-card";
         card.innerHTML = `

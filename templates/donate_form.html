@@ -137,19 +137,23 @@
   </form>
 
   <script>
-    document.getElementById("donationForm").addEventListener("submit", function(e) {
+    document.getElementById("donationForm").addEventListener("submit", function (e) {
       e.preventDefault();
+
       const formData = new FormData(e.target);
       const donation = {};
       formData.forEach((value, key) => {
         donation[key] = value;
       });
 
+      // Add a unique identifier to the donation data
+      donation.source = "donate_form";
+
       let donations = JSON.parse(localStorage.getItem("donations")) || [];
       donations.push(donation);
       localStorage.setItem("donations", JSON.stringify(donations));
 
-      // Redirect to dashboard after saving
+      // Redirect to the dashboard after saving
       window.location.href = "emergency_donation_dashboard.html";
     });
   </script>
