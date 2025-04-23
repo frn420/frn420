@@ -23,7 +23,9 @@ sample_nutrients = {
     "pizza": {"Calories": "266 kcal", "Protein": "11 g", "Carbs": "33 g", "Fats": "10 g"},
     "samosa": {"Calories": "262 kcal", "Protein": "6 g", "Carbs": "30 g", "Fats": "15 g"},
     "ice_cream": {"Calories": "207 kcal", "Protein": "3.5 g", "Carbs": "24 g", "Fats": "11 g"},
-    "butter_chicken": {"Calories": "438 kcal", "Protein": "30 g", "Carbs": "15 g", "Fats": "30 g"},
+    "chicken_curry": {"Calories": "438 kcal", "Protein": "30 g", "Carbs": "15 g", "Fats": "30 g"},
+    "fried_rice": {"Calories": "343 kcal", "Protein": "14 g", "Carbs": "55 g", "Fats": "7 g"},
+    "apple_pie": {"Calories": "411 kcal", "Protein": "4 g", "Carbs": "58 g", "Fats": "19.4 g"},
 }
 
 default_nutrients = {"Calories": "300 kcal", "Protein": "10 g", "Carbs": "40 g", "Fats": "12 g"}
@@ -46,10 +48,18 @@ def predict_nutrients(filepath):
         with torch.no_grad():
             outputs = model(image)
             _, predicted_idx = outputs.max(1)
-            food_name = food_classes[predicted_idx.item()]
+            food_name = food_classes[predicted_idx.item()].lower().replace(" ", "_")  # Normalize food name
+
+        # Debugging
+        print(f"Predicted food name: {food_name}")
 
         # Get nutrient data
         nutrients = sample_nutrients.get(food_name, default_nutrients)
+        if nutrients == default_nutrients:
+            print("Using default nutrients.")
+        else:
+            print("Nutrient data found!")
+
         return food_name, nutrients
 
     except Exception as e:

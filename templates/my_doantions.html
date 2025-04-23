@@ -124,6 +124,7 @@
               <p><strong>Name:</strong> <span class="highlight">${donation.contactName}</span></p>
               <p><strong>Food Type:</strong> ${donation.foodType}</p>
               <p><strong>Quantity:</strong> ${donation.quantity}</p>
+              <p><strong>Selling Price:</strong> ${donation.sellingPrice}</p>
               <p><strong>Expiry:</strong> ${donation.expiry}</p>
               <p><strong>Location:</strong> ${donation.location}</p>
               <p><strong>Category:</strong> ${donation.foodCategory}</p>
@@ -136,6 +137,7 @@
             <div>
               <img src="${donation.imageUrl || 'https://via.placeholder.com/120'}" alt="Food Image" class="food-image" style="margin-left: 69px; margin-top: 16px;">
               <div style="margin-top: 10px; margin-left: 69px;">
+                <p><strong>Nutrition</strong></p>
                 <p><strong>Calories:</strong> ${donation.nutrients?.Calories || 'N/A'}</p>
                 <p><strong>Protein:</strong> ${donation.nutrients?.Protein || 'N/A'}</p>
                 <p><strong>Carbs:</strong> ${donation.nutrients?.Carbs || 'N/A'}</p>

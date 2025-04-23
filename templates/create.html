@@ -326,6 +326,13 @@
             <input type="date" id="expiry" name="expiry" required />
           </div>
         </div>
+        <div>
+          <label for="sellingPrice">Selling Price </label>
+          <div class="input-icon">
+            <i class="fas fa-rupee-sign"></i>
+            <input type="number" id="sellingPrice" name="sellingPrice" placeholder="e.g. 100.00/-" min="0" />
+          </div>
+        </div>
       </div>
 
       <div>
@@ -433,6 +440,7 @@
                 foodType: document.getElementById("foodType").value,
                 foodPreference: document.getElementById("foodPreference").value,
                 quantity: document.getElementById("quantity").value,
+                sellingPrice: document.getElementById("sellingPrice").value || "Free", // Default to "Free" if not provided
                 expiry: document.getElementById("expiry").value,
                 location: document.getElementById("location").value,
                 foodCategory: document.getElementById("foodCategory").value,
