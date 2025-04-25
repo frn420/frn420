@@ -68,35 +68,48 @@
   <a href="donate_form.html" class="back-link">← Submit Another Donation</a>
 
   <script>
-    const donations = JSON.parse(localStorage.getItem("donations")) || [];
-    const listContainer = document.getElementById("donationList");
+  async function fetchDonations() {
+    try {
+      const response = await fetch("/api/emergency-donations");
+      if (!response.ok) {
+        throw new Error("Failed to fetch donations");
+      }
 
-    const filteredDonations = donations.filter(donation => donation.source === "donate_form");
+      const donations = await response.json();
+      const listContainer = document.getElementById("donationList");
 
-    if (filteredDonations.length === 0) {
-      listContainer.innerHTML = "<p>No donations yet. Be the first to donate!</p>";
-    } else {
-      filteredDonations.forEach(donation => {
-        const card = document.createElement("div");
-        card.className = "donation-card";
-        card.innerHTML = `
-          <h3>${donation.name}</h3>
-          <p><strong>Phone:</strong> ${donation.phone}</p>
-          <p><strong>Email:</strong> ${donation.email}</p>
-          <p><strong>Location:</strong> ${donation.location}</p>
-          <p><strong>Food Type:</strong> ${donation.foodType}</p>
-          <p><strong>Quantity:</strong> ${donation.quantity}</p>
-          <p><strong>Available From:</strong> ${donation.availableFrom}</p>
-          <p><strong>Expiry:</strong> ${donation.expiry || 'N/A'}</p>
-          <p><strong>Recurring:</strong> ${donation.recurring}</p>
-          <p><strong>Donation Type:</strong> ${donation.donationType}</p>
-          <p><strong>Packaged:</strong> ${donation.packaged}</p>
-          <p><strong>Comments:</strong> ${donation.comments || 'None'}</p>
-        `;
-        listContainer.appendChild(card);
-      });
+      if (donations.length === 0) {
+        listContainer.innerHTML = "<p>No donations yet. Be the first to donate!</p>";
+      } else {
+        donations.forEach(donation => {
+          const card = document.createElement("div");
+          card.className = "donation-card";
+          card.innerHTML = `
+            <h3>${donation.name}</h3>
+            <p><strong>Phone:</strong> ${donation.phone}</p>
+            <p><strong>Email:</strong> ${donation.email}</p>
+            <p><strong>Location:</strong> ${donation.location}</p>
+            <p><strong>Food Type:</strong> ${donation.food_type}</p>
+            <p><strong>Quantity:</strong> ${donation.quantity}</p>
+            <p><strong>Available From:</strong> ${donation.available_from}</p>
+            <p><strong>Expiry:</strong> ${donation.expiry}</p>
+            <p><strong>Recurring:</strong> ${donation.recurring}</p>
+            <p><strong>Donation Type:</strong> ${donation.donation_type}</p>
+            <p><strong>Packaged:</strong> ${donation.packaged}</p>
+            <p><strong>Comments:</strong> ${donation.comments || 'None'}</p>
+          `;
+          listContainer.appendChild(card);
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching donations:", error);
+      document.getElementById("donationList").innerHTML = "<p>Failed to load donations.</p>";
     }
-  </script>
+  }
+
+  // Fetch donations on page load
+  fetchDonations();
+</script>
 </body>
 </html>
 

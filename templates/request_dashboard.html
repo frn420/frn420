@@ -73,27 +73,42 @@
   <a href="request_food_aid.html" class="back-link">← Request More Food Aid</a>
 
   <script>
-    const requests = JSON.parse(localStorage.getItem("requests")) || [];
-    const listContainer = document.getElementById("requestList");
+  async function fetchRequests() {
+    try {
+      const response = await fetch("/api/food-aid-requests");
+      if (!response.ok) {
+        throw new Error("Failed to fetch food aid requests");
+      }
 
-    if (requests.length === 0) {
-      listContainer.innerHTML = "<p>No food aid requests yet. Be the first to request aid!</p>";
-    } else {
-      requests.forEach(request => {
-        const card = document.createElement("div");
-        card.className = "request-card";
-        card.innerHTML = `
-          <h3>${request.name}</h3>
-          <p><strong>Phone:</strong> ${request.phone}</p>
-          <p><strong>Email:</strong> ${request.email}</p>
-          <p><strong>Location:</strong> ${request.location}</p>
-          <p><strong>Type of Request:</strong> ${request.aidType}</p>
-          <p><strong>Comments:</strong> ${request.comments || 'None'}</p>
-          <p><strong>Status:</strong> <span class="status">${request.status || 'Not Delivered'}</span></p>
-        `;
-        listContainer.appendChild(card);
-      });
+      const requests = await response.json();
+      const listContainer = document.getElementById("requestList");
+
+      if (requests.length === 0) {
+        listContainer.innerHTML = "<p>No food aid requests yet. Be the first to request aid!</p>";
+      } else {
+        requests.forEach(request => {
+          const card = document.createElement("div");
+          card.className = "request-card";
+          card.innerHTML = `
+            <h3>${request.name}</h3>
+            <p><strong>Phone:</strong> ${request.phone}</p>
+            <p><strong>Email:</strong> ${request.email}</p>
+            <p><strong>Location:</strong> ${request.location}</p>
+            <p><strong>Type of Request:</strong> ${request.aidType}</p>
+            <p><strong>Organization Type:</strong> ${request.organizationType}</p>
+            <p><strong>Comments:</strong> ${request.comments || 'None'}</p>
+          `;
+          listContainer.appendChild(card);
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching food aid requests:", error);
+      document.getElementById("requestList").innerHTML = "<p>Failed to load food aid requests.</p>";
     }
-  </script>
+  }
+
+  // Fetch requests on page load
+  fetchRequests();
+</script>
 </body>
 </html>

@@ -137,25 +137,36 @@
   </form>
 
   <script>
-    document.getElementById("donationForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+  document.getElementById("donationForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const formData = new FormData(e.target);
-      const donation = {};
-      formData.forEach((value, key) => {
-        donation[key] = value;
+    const formData = new FormData(e.target);
+    const donation = {};
+    formData.forEach((value, key) => {
+      donation[key] = value;
+    });
+
+    try {
+      // Submit the form data to the backend
+      const response = await fetch("/api/emergency-donation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(donation),
       });
 
-      // Add a unique identifier to the donation data
-      donation.source = "donate_form";
+      if (!response.ok) {
+        throw new Error("Failed to submit donation");
+      }
 
-      let donations = JSON.parse(localStorage.getItem("donations")) || [];
-      donations.push(donation);
-      localStorage.setItem("donations", JSON.stringify(donations));
-
-      // Redirect to the dashboard after saving
+      // Redirect to the dashboard after successful submission
       window.location.href = "emergency_donation_dashboard.html";
-    });
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while submitting the donation.");
+    }
+  });
   </script>
 </body>
 </html>

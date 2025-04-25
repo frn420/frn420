@@ -244,7 +244,7 @@
 
     /* Add this CSS for the loading spinner */
     .loading-overlay {
-      display: none;
+      display: none; /* Hidden by default */
       position: fixed;
       top: 0;
       left: 0;
@@ -257,7 +257,7 @@
     }
 
     .loading-overlay.active {
-      display: flex;
+      display: flex; /* Show when active */
     }
 
     .spinner {
@@ -408,69 +408,39 @@
   </div>
 
   <script>
-    function goBack() {
-        window.location.href = "dashboard.html"; // Redirect to the donor dashboard
-    }
+  document.getElementById("donationForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-    // Handle form submission for storing data in localStorage and submitting to AI Nutrients Predictor
-    document.getElementById("donationForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+    const form = document.getElementById("donationForm");
+    const formData = new FormData(form);
+    const loadingOverlay = document.getElementById("loadingOverlay");
 
-        // Show the loading overlay
-        const loadingOverlay = document.getElementById("loadingOverlay");
+    try {
+        // Show the loading spinner
         loadingOverlay.classList.add("active");
 
-        const form = document.getElementById("donationForm");
-        const formData = new FormData(form);
-
-        // Submit the form to the backend
-        fetch("/food-predictor", {
+        const response = await fetch("/api/create-donation", {
             method: "POST",
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Expecting JSON response
-        })
-        .then(result => {
-            // Save donation data in localStorage
-            const donationData = {
-                foodType: document.getElementById("foodType").value,
-                foodPreference: document.getElementById("foodPreference").value,
-                quantity: document.getElementById("quantity").value,
-                sellingPrice: document.getElementById("sellingPrice").value || "Free", // Default to "Free" if not provided
-                expiry: document.getElementById("expiry").value,
-                location: document.getElementById("location").value,
-                foodCategory: document.getElementById("foodCategory").value,
-                storage: document.getElementById("storage").value,
-                contactName: document.getElementById("contactName").value,
-                contactPhone: document.getElementById("contactPhone").value,
-                notes: document.getElementById("notes").value,
-                imageUrl: result.image_url, // Save the image URL returned by the backend
-                nutrients: result.nutrients, // Save the nutrient data returned by the backend
-                timestamp: new Date().toISOString()
-            };
-
-            const previousData = JSON.parse(localStorage.getItem("donations")) || [];
-            previousData.push(donationData);
-            localStorage.setItem("donations", JSON.stringify(previousData));
-
-            // Redirect to food_predictor.html with the prediction results
-            document.open();
-            document.write(result.html); // Assuming the backend returns HTML content
-            document.close();
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert(`An error occurred while submitting the donation: ${error.message}`);
-        })
-        .finally(() => {
-            // Hide the loading overlay after the process is complete
-            loadingOverlay.classList.remove("active");
+            body: formData,
         });
-    });
+
+        if (!response.ok) {
+            throw new Error("Failed to submit donation");
+        }
+
+        // Parse the response data
+        const responseData = await response.json();
+        console.log(responseData); // Debug: Log the response data
+
+        // Redirect to the food predictor page with query parameters
+        window.location.href = `/food_predictor.html?food=${responseData.food}&calories=${responseData.calories}&protein=${responseData.protein}&carbs=${responseData.carbs}&fats=${responseData.fats}&image_url=${encodeURIComponent(responseData.image_url)}`;
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while submitting the donation.");
+        // Hide the loading spinner if an error occurs
+        loadingOverlay.classList.remove("active");
+    }
+});
   </script>
 </body>
 </html>

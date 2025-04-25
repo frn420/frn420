@@ -106,39 +106,47 @@
   <footer>
     ⓒ 2025 | Biofertilizer Division | Food Rescue Network
   </footer>
-
   <script>
-    function renderSavedListings() {
-      const container = document.getElementById('listingContainer');
-      container.innerHTML = '';
 
-      const saved = JSON.parse(localStorage.getItem('biofertilizerListings') || '[]');
+async function renderSavedListings() {
+  const container = document.getElementById('listingContainer');
+  container.innerHTML = '';
 
-      if (saved.length === 0) {
-        container.innerHTML = "<p>No listings available yet. Please add a listing!</p>";
-        return;
-      }
-
-      saved.forEach(data => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.setAttribute('data-category', data.type);
-        card.innerHTML = `
-  <h3>${data.name}</h3>
-  <p>
-    Type: ${data.type}<br>
-    ${data.quantity} kg required<br>
-    Required by: ${data.pickup}<br>
-    Location: ${data.location}<br>
-    Contact: ${data.contact}
-  </p>
-`;
-
-        container.appendChild(card);
-      });
+  try {
+    const response = await fetch('/api/get-biofertilizers');
+    if (!response.ok) {
+      throw new Error("Failed to fetch listings");
     }
 
-    window.onload = renderSavedListings;
+    const listings = await response.json();
+
+    if (listings.length === 0) {
+      container.innerHTML = "<p>No listings available yet. Please add a listing!</p>";
+      return;
+    }
+
+    listings.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${data.companyName}</h3>
+        <p>
+          Type: ${data.materialType}<br>
+          ${data.quantity} kg required<br>
+          Required by: ${data.pickupDate}<br>
+          Location: ${data.pickupLocation}<br>
+          Contact: ${data.contact}
+        </p>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    container.innerHTML = "<p>Failed to load listings.</p>";
+  }
+}
+
+window.onload = renderSavedListings;
   </script>
 </body>
 </html>

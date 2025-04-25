@@ -198,37 +198,46 @@
   </div>
 
   <script>
-      const listings = JSON.parse(localStorage.getItem('ngoListings')) || [];
-      const container = document.getElementById('listingContainer');
-    
-      if (listings.length === 0) {
-        container.innerHTML = "<p>No listings available yet. Please check back later!</p>";
-      }
-    
-      listings.forEach(data => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h3>${data.name}</h3>
-          <p>
-            Food: ${data.type}<br>
-            Quantity: ${data.quantity} kg<br>
-            Required by: ${data.pickup}<br>
-            Location: ${data.location}<br>
-            Contact: ${data.contact}<br>
-          </p>
-        `;
-    
-        const button = document.createElement('button');
-        button.textContent = 'Request Order';
-        button.addEventListener('click', () => {
-          alert(`Material request sent for ${data.name}`);
-        });
-    
-        card.appendChild(button);
-        container.appendChild(card);
-      });
-    </script>
+    async function renderNGOListings() {
+  const container = document.getElementById('listingContainer');
+  container.innerHTML = '';
+
+  try {
+    const response = await fetch('/api/get-ngo-requirements');
+    if (!response.ok) {
+      throw new Error("Failed to fetch NGO requirements");
+    }
+
+    const requirements = await response.json();
+
+    if (requirements.length === 0) {
+      container.innerHTML = "<p>No NGO requirements available yet. Please check back later!</p>";
+      return;
+    }
+
+    requirements.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${data.ngoName}</h3>
+        <p>
+          Food: ${data.materialType}<br>
+          Quantity: ${data.quantity} kg<br>
+          Needed by: ${data.pickupDate}<br>
+          Location: ${data.pickupLocation}<br>
+          Contact: ${data.contact}<br>
+        </p>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error fetching NGO requirements:", error);
+    container.innerHTML = "<p>Failed to load NGO requirements.</p>";
+  }
+}
+
+window.onload = renderNGOListings;
+  </script>
     
 </body>
 </html>

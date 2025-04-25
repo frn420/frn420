@@ -16,7 +16,7 @@ model.eval()
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "model", "model.pth")
 
 # Load the model
-model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
+model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu'), weights_only=True))
 
 # Define some sample nutrient data (you can expand this)
 sample_nutrients = {

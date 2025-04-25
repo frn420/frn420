@@ -212,9 +212,9 @@
   <script>
     let listings = JSON.parse(localStorage.getItem('ngoListings')) || [];
 
-function saveListing() {
+async function saveListing() {
   const name = document.getElementById('companyName').value;
-  const type = document.getElementById('materialType').value.toLowerCase();
+  const type = document.getElementById('materialType').value;
   const quantity = document.getElementById('quantity').value;
   const pickup = document.getElementById('pickupDate').value;
   const pickupLocation = document.getElementById('pickupLocation').value;
@@ -225,50 +225,92 @@ function saveListing() {
     return;
   }
 
-  const cardData = {
-    name,
-    type,
-    quantity,
-    pickup,
-    location: pickupLocation,
-    contact,
-    timestamp: new Date().toISOString()
+  const data = {
+    ngoName: name,
+    materialType: type,
+    quantity: parseFloat(quantity),
+    pickupDate: pickup,
+    pickupLocation: pickupLocation,
+    contact: contact
   };
 
-  listings.push(cardData);
-  localStorage.setItem('ngoListings', JSON.stringify(listings));
+  try {
+    const response = await fetch('/api/add-ngo-requirement', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-  alert("Request submitted successfully!");
-  document.getElementById('companyName').value = '';
-  document.getElementById('materialType').value = '';
-  document.getElementById('quantity').value = '';
-  document.getElementById('pickupDate').value = '';
-  document.getElementById('pickupLocation').value = '';
-  document.getElementById('contact').value = '';
+    if (!response.ok) {
+      throw new Error("Failed to add requirement");
+    }
 
-  renderSavedListings();  // This will ensure the list is updated immediately after submission
+    alert("Requirement submitted successfully!");
+    document.getElementById('companyName').value = '';
+    document.getElementById('materialType').value = '';
+    document.getElementById('quantity').value = '';
+    document.getElementById('pickupDate').value = '';
+    document.getElementById('pickupLocation').value = '';
+    document.getElementById('contact').value = '';
+
+    renderSavedListings(); // Refresh the listings
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred while adding the requirement.");
+  }
 }
 
-function renderSavedListings() {
+async function renderSavedListings() {
   const container = document.getElementById('listingContainer');
-  
-  container.innerHTML = '';  // Clear any previous content
+  container.innerHTML = '';
 
-  listings.forEach(data => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <h3>${data.name}</h3>
-      <p>
-        Food: ${data.type}<br>
-        Quantity: ${data.quantity} kg<br>
-        Needed by: ${data.pickup}<br>
-        Location: ${data.location}<br>
-        Contact: ${data.contact}<br>
-      </p>
-    `;
-    container.appendChild(card);
-  });
+  try {
+    const response = await fetch('/api/get-ngo-requirements');
+    if (!response.ok) {
+      throw new Error("Failed to fetch requirements");
+    }
+
+    const requirements = await response.json();
+
+    if (requirements.length === 0) {
+      container.innerHTML = "<p>No requirements available yet. Please add a requirement!</p>";
+      return;
+    }
+
+    requirements.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${data.ngoName}</h3>
+        <p>
+          Food: ${data.materialType}<br>
+          Quantity: ${data.quantity} kg<br>
+          Needed by: ${data.pickupDate}<br>
+          Location: ${data.pickupLocation}<br>
+          Contact: ${data.contact}<br>
+        </p>
+        <button onclick="requestRequirement('${data.id}', '${data.ngoName}')">Request Order</button>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error fetching requirements:", error);
+    container.innerHTML = "<p>Failed to load requirements.</p>";
+  }
+}
+
+function requestRequirement(id, ngoName) {
+  alert(`Material request sent for ${ngoName} (ID: ${id}).`);
+  // Optionally, send a request to the backend to mark the requirement as requested
+  // Example:
+  // fetch(`/api/request-ngo-requirement/${id}`, { method: 'POST' })
+  //   .then(response => {
+  //     if (!response.ok) throw new Error("Failed to request requirement");
+  //     alert("Requirement successfully requested!");
+  //   })
+  //   .catch(error => console.error("Error:", error));
 }
 
 window.onload = renderSavedListings;

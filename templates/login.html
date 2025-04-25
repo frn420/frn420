@@ -97,14 +97,14 @@
   <div class="login-container">
     <div class="login-box">
       <h2>Welcome Back</h2>
-      <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+      <form id="loginForm">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required />
+          <input type="email" id="email" required />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" required />
           <svg class="eye-icon" id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
           </svg>
@@ -126,22 +126,31 @@
       passwordInput.setAttribute("type", type);
     });
 
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      const users = JSON.parse(localStorage.getItem("users")) || [];
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
 
-      const matchedUser = users.find(user => user.email === email && user.password === password);
+        const result = await response.json();
 
-      if (matchedUser) {
-        alert("Login successful!");
-        localStorage.setItem("loggedInUser", JSON.stringify(matchedUser)); // Save logged-in user
-        window.location.href = "/"; // Redirect to homepage
-      } else {
-        alert("Invalid email or password.");
+        if (response.ok) {
+          alert("Login successful!");
+          window.location.href = "/"; // Redirect to dashboard
+        } else {
+          alert(result.error || "Invalid email or password.");
+        }
+      } catch (error) {
+        alert("An error occurred. Please try again later.");
       }
     });
   </script>

@@ -127,7 +127,7 @@
   </div>
 
   <script>
-    document.getElementById("signupForm").addEventListener("submit", function (e) {
+    document.getElementById("signupForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
@@ -139,19 +139,26 @@
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem("users")) || [];
+      try {
+        const response = await fetch("/api/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        });
 
-      const userExists = users.find(user => user.email === email);
-      if (userExists) {
-        alert("Email already registered. Please log in.");
-        return;
+        const result = await response.json();
+
+        if (response.ok) {
+          alert("Sign up successful! Redirecting to login...");
+          window.location.href = "login.html";
+        } else {
+          alert(result.error || "An error occurred during sign up.");
+        }
+      } catch (error) {
+        alert("An error occurred. Please try again later.");
       }
-
-      users.push({ name, email, password });
-      localStorage.setItem("users", JSON.stringify(users));
-
-      alert("Sign up successful! Redirecting to login...");
-      window.location.href = "login.html";
     });
 
     const passwordInput = document.getElementById("password");

@@ -85,5 +85,31 @@
             window.location.href = "my_doantions.html"; // Redirect to My Donations page
         }
     </script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Get the query parameters
+    const params = new URLSearchParams(window.location.search);
+    const food = params.get("food");
+    const imageUrl = params.get("image_url");
+    const calories = params.get("calories");
+    const protein = params.get("protein");
+    const carbs = params.get("carbs");
+    const fats = params.get("fats");
+
+    // Display the prediction results
+    if (food && imageUrl && calories && protein && carbs && fats) {
+        document.querySelector(".image-container img").src = imageUrl;
+        document.querySelector(".results").innerHTML = `
+            <p><strong>Food Name:</strong> ${food}</p>
+            <p><strong>Calories:</strong> ${calories}</p>
+            <p><strong>Protein:</strong> ${protein}</p>
+            <p><strong>Carbs:</strong> ${carbs}</p>
+            <p><strong>Fats:</strong> ${fats}</p>
+        `;
+    } else {
+        document.body.innerHTML = "<p>Failed to load prediction results. Please try again.</p>";
+    }
+});
+</script>
 </body>
 </html>
