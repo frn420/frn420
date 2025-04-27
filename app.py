@@ -321,6 +321,8 @@ def api_logout():
 
 @app.route('/api/create-donation', methods=['POST'])
 def create_donation():
+    print("Session data:", session)  # Debugging: Print session data
+
     food_image = request.files.get('food_image')
     if food_image:
         filename = secure_filename(food_image.filename)
