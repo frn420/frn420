@@ -9,7 +9,7 @@ from sqlalchemy import text  # Import the text function
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Generate a random secret key
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:v@localhost:5432/FRN2'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:LAcxugTMGJIGwmoqTiVBwhfMDimEFTJi@postgres-uwx_.railway.internal:5432/railway'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking for performance
 
 dp = SQLAlchemy(app)
