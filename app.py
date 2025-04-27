@@ -321,55 +321,54 @@ def api_logout():
 
 @app.route('/api/create-donation', methods=['POST'])
 def create_donation():
-    print("Session data:", session)  # Debugging: Print session data
+    try:
+        food_image = request.files.get('food_image')
+        if not food_image:
+            return jsonify({"error": "Food image is required"}), 400
 
-    food_image = request.files.get('food_image')
-    if food_image:
         filename = secure_filename(food_image.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         food_image.save(filepath)
-    else:
-        return jsonify({"error": "Food image is required"}), 400
 
-    # Use the logged-in user's name from the session for contact_name
-    contact_name = session.get('user_name')
-    if not contact_name:
-        return jsonify({"error": "Unauthorized"}), 401
+        contact_name = session.get('user_name')
+        if not contact_name:
+            return jsonify({"error": "Unauthorized"}), 401
 
-    # Use food_predictor.py to predict food name and nutrients
-    food_name, nutrients = predict_nutrients(filepath)
+        food_name, nutrients = predict_nutrients(filepath)
 
-    # Save the donation data to the database
-    new_donation = Donation(
-        food_type=request.form.get('foodType'),
-        food_preference=request.form.get('foodPreference'),
-        quantity=request.form.get('quantity'),
-        expiry=request.form.get('expiry'),
-        selling_price=request.form.get('sellingPrice', 'Free'),
-        location=request.form.get('location'),
-        food_category=request.form.get('foodCategory'),
-        storage=request.form.get('storage'),
-        contact_name=contact_name,
-        contact_phone=request.form.get('contactPhone'),
-        notes=request.form.get('notes'),
-        image_url=filepath,
-        calories=nutrients.get('Calories'),
-        protein=nutrients.get('Protein'),
-        carbs=nutrients.get('Carbs'),
-        fats=nutrients.get('Fats')
-    )
-    dp.session.add(new_donation)
-    dp.session.commit()
+        new_donation = Donation(
+            food_type=request.form.get('foodType'),
+            food_preference=request.form.get('foodPreference'),
+            quantity=request.form.get('quantity'),
+            expiry=request.form.get('expiry'),
+            selling_price=request.form.get('sellingPrice', 'Free'),
+            location=request.form.get('location'),
+            food_category=request.form.get('foodCategory'),
+            storage=request.form.get('storage'),
+            contact_name=contact_name,
+            contact_phone=request.form.get('contactPhone'),
+            notes=request.form.get('notes'),
+            image_url=filepath,
+            calories=nutrients.get('Calories'),
+            protein=nutrients.get('Protein'),
+            carbs=nutrients.get('Carbs'),
+            fats=nutrients.get('Fats')
+        )
+        dp.session.add(new_donation)
+        dp.session.commit()
 
-    # Return the prediction results as JSON
-    return jsonify({
-        "food": food_name,
-        "calories": nutrients.get("Calories"),
-        "protein": nutrients.get("Protein"),
-        "carbs": nutrients.get("Carbs"),
-        "fats": nutrients.get("Fats"),
-        "image_url": filepath
-    }), 201
+        return jsonify({
+            "food": food_name,
+            "calories": nutrients.get("Calories"),
+            "protein": nutrients.get("Protein"),
+            "carbs": nutrients.get("Carbs"),
+            "fats": nutrients.get("Fats"),
+            "image_url": filepath
+        }), 201
+    except Exception as e:
+        dp.session.rollback()
+        print(f"Error in /api/create-donation: {e}")
+        return jsonify({"error": "Internal server error"}), 500
 
 @app.route('/api/my-donations', methods=['GET'])
 def my_donations_api():
