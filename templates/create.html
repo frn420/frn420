@@ -446,21 +446,6 @@
   function goBack() {
     window.location.href = "dashboard.html"; // Redirects to the dashboard page
   }
-
-  async function checkSession() {
-  const response = await fetch('/api/check-session');
-  const data = await response.json();
-
-  if (!data.logged_in) {
-    alert("You must be logged in to create a donation.");
-    window.location.href = "/login.html"; // Redirect to the login page
-  }
-}
-
-// Call the session check on page load
-window.onload = async () => {
-  await checkSession();
-};
   </script>
 </body>
 </html>
