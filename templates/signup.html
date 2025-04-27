@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign Up</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
@@ -14,26 +15,31 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #f1f8e9, #eaffd0);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      color: #3a5a40;
     }
 
     .signup-container {
-      background: #fff;
-      padding: 3rem;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
       border-radius: 1.5rem;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      box-shadow: 0 12px 30px rgba(56, 142, 60, 0.2);
       width: 100%;
-      max-width: 400px;
+      max-width: 360px;
       position: relative;
+    }
+
+    .signup-container:hover {
+      box-shadow: 0 15px 60px rgba(56, 142, 60, 0.3);
     }
 
     .signup-container h2 {
       text-align: center;
-      color: #8bc34a;
+      color: #388e3c;
       margin-bottom: 2rem;
       font-size: 2rem;
     }
@@ -47,15 +53,24 @@
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
+      color: #3a5a40;
+      font-size: 1rem;
     }
 
     .form-group input {
       width: 100%;
-      padding: 0.75rem;
-      padding-right: 2.5rem;
+      padding: 1rem;
+      padding-right: 3rem;
       border: 1px solid #ccc;
-      border-radius: 0.75rem;
+      border-radius: 1rem;
       font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #388e3c;
+      outline: none;
+      box-shadow: 0 0 5px rgba(56, 142, 60, 0.3);
     }
 
     .eye-icon {
@@ -63,39 +78,46 @@
       top: 69.69%;
       right: 1rem;
       transform: translateY(-50%);
-      cursor: pointer;
       width: 20px;
       height: 20px;
       fill: #aaa;
+      cursor: pointer;
     }
 
     .signup-btn {
-      background: linear-gradient(135deg, #689F38, #33691E);
-      color: #fff;
-      padding: 0.75rem;
+      background: linear-gradient(135deg, #388e3c, #2c6b2f);
+      color: white;
+      padding: 1rem;
       width: 100%;
+      font-size: 1.2rem;
       border: none;
-      border-radius: 0.75rem;
-      font-size: 1.1rem;
+      border-radius: 1rem;
       cursor: pointer;
+      margin-top: 1.5rem;
       font-weight: bold;
-      margin-top: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .signup-btn:hover {
+      background: linear-gradient(135deg, #2c6b2f, #388e3c);
+      transform: translateY(-3px);
     }
 
     .footer {
       text-align: center;
-      margin-top: 1.25rem;
-      font-size: 0.95rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
     }
 
     .footer a {
-      color: #8BC34A;
+      color: #388e3c;
+      font-weight: 600;
       text-decoration: none;
-      font-weight: bold;
+      transition: color 0.3s ease;
     }
 
     .footer a:hover {
-      text-decoration: underline;
+      color: #2c6b2f;
     }
   </style>
 </head>

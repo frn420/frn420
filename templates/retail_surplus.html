@@ -3,366 +3,335 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Retail Surplus</title>
+  <title>Request Surplus Food</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <style>
-    * {
-      box-sizing: border-box;
+    body {
+      font-family: 'Baloo 2', sans-serif;
+      background: linear-gradient(135deg, #e9f7f1, #d6faed);
+      color: #3a5a40;
       margin: 0;
       padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
-      color: #2f855a;
-      padding: 40px 20px;
-      transition: background 0.3s ease, color 0.3s ease;
+      box-sizing: border-box;
     }
 
     h1 {
       text-align: center;
+      margin-top: 50px;
       font-size: 3rem;
       color: #22543d;
-      margin-bottom: 10px;
     }
 
     .subtitle {
       text-align: center;
-      color: #4a5568;
+      font-size: 1.2rem;
+      color: #388e3c;
+      margin-bottom: 40px;
+    }
+
+    .form-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      margin: 0 auto 60px auto;
+      max-width: 700px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .form-container:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-container h2 {
+      text-align: center;
       margin-bottom: 30px;
+      font-size: 2rem;
+      color: #22543d;
+      font-weight: bold;
+    }
+
+    .form-container label {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #344e41;
+    }
+
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #a8e6cf;
+      border-radius: 10px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+
+    .form-container input:focus,
+    .form-container select:focus,
+    .form-container textarea:focus {
+      border-color: #388e3c;
+      background-color: #e8f7e6;
+      outline: none;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 15px;
+      background-color: #388e3c;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
       font-size: 1.2rem;
     }
 
-    .controls {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .filters input,
-    .filters select {
-      padding: 10px 14px;
-      border: 1px solid #38a169;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
-    .toggle-view {
-      margin: 10px;
-      padding: 10px 20px;
-      background-color: #38a169;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .toggle-view:hover {
+    .form-container button:hover {
       background-color: #2f855a;
     }
 
-    .surplus-container {
+    .requests-section {
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+
+    .requests-section h2 {
+      text-align: center;
+      color: #22543d;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .listings {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 25px;
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
     }
 
-    .surplus-card {
+    .card {
       background: #ffffff;
-      border: 2px solid #c5e1a5;
-      border-radius: 16px;
-      padding: 20px;
-      width: 280px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease;
+      border: 2px solid #a4e3c1;
+      border-radius: 20px;
+      padding: 25px;
+      width: 300px;
+      box-shadow: 0 6px 12px rgba(139, 195, 74, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .surplus-card:hover {
+    .card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(139, 195, 74, 0.3);
     }
 
-    .surplus-card h3 {
-      color: #2f855a;
-      margin-bottom: 8px;
-    }
-
-    .badge {
-      background: #38a169;
-      color: white;
-      font-size: 0.8rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-right: 5px;
-    }
-
-    .progress {
-      background: #f1f8e9;
-      border-radius: 10px;
-      height: 10px;
-      margin: 10px 0;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: #38a169;
-    }
-
-    .info {
-      font-size: 0.9rem;
+    .card h3 {
+      color: #38a169;
       margin-bottom: 10px;
-      color: #5d4037;
+      font-size: 1.4rem;
     }
 
-    .surplus-card button {
-      width: 100%;
+    .card p {
+      color: #6d4c41;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .card button {
       background-color: #38a169;
       color: white;
       border: none;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-
-    .surplus-card button:hover {
-      background: #2f855a;
-    }
-
-    .load-more {
-      text-align: center;
-      margin: 30px 0;
-    }
-
-    .load-more button {
-      background-color: #38a169;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .load-more button:hover {
-      background-color: #2f855a;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      font-size: 0.9rem;
-      color: #9E9E9E;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.4);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      max-width: 400px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-content button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      background: #8bc34a;
-      color: white;
       border-radius: 8px;
-      font-weight: bold;
+      padding: 8px 12px;
       cursor: pointer;
+      font-size: 14px;
     }
 
-    /* 🔄 Dark mode */
-    body.dark-mode {
-      background: #263238;
-      color: #ffffff;
-    }
-
-    body.dark-mode .surplus-card {
-      background: #37474f;
-      border-color: #607d8b;
-      color: #eceff1;
-    }
-
-    body.dark-mode .modal-content {
-      background: #455a64;
-      color: white;
-    }
-
-    body.list-view .surplus-container {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    body.list-view .surplus-card {
-      width: 90%;
-      max-width: 600px;
+    .card button:disabled {
+      background-color: #a5d6a7;
+      cursor: default;
     }
   </style>
 </head>
 <body>
-  <h1>Retail Surplus</h1>
-  <p class="subtitle">Explore surplus inventory available from participating food retailers 🛒</p>
 
-  <div class="controls">
-    <div class="filters">
-      <input type="text" id="searchInput" placeholder="Search items..." oninput="filterCards()" />
-      <select id="categoryFilter" onchange="filterCards()">
-        <option value="">All Categories</option>
-        <option value="produce">Produce</option>
-        <option value="dairy">Dairy</option>
-        <option value="bakery">Bakery</option>
-        <option value="canned">Canned</option>
-        <option value="frozen">Frozen</option>
+  <h1>Request Surplus Food</h1>
+  <p class="subtitle">Fill in the form below to request surplus food from participating donors.</p>
+
+  <div class="form-container">
+    <h2>Surplus Food Request</h2>
+    <form id="requestForm" onsubmit="submitRequest(event)">
+      <label for="organizationName">Organization Name</label>
+      <input type="text" id="organizationName" name="organizationName" required placeholder="Enter your organization's name" />
+
+      <label for="contactPerson">Contact Person</label>
+      <input type="text" id="contactPerson" name="contactPerson" required placeholder="Enter the contact person's name" />
+
+      <label for="contactNumber">Contact Number</label>
+      <input type="text" id="contactNumber" name="contactNumber" required placeholder="Enter your contact number" />
+
+      <label for="itemRequested">Item Requested</label>
+      <select id="itemRequested" name="itemRequested" required>
+        <option value="">-- Select Item --</option>
+        <option value="Produce">Produce</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Bakery">Bakery</option>
+        <option value="Canned">Canned</option>
+        <option value="Frozen">Frozen</option>
       </select>
-      <select id="sortQuantity" onchange="filterCards()">
-        <option value="">Sort by Quantity</option>
-        <option value="asc">Lowest First</option>
-        <option value="desc">Highest First</option>
-        <option value="expirySoonest">Expiry Soonest</option>
-        <option value="expiryLatest">Expiry Latest</option>
-      </select>
-    </div>
-    <button class="toggle-view" onclick="toggleView()">Toggle View</button>
+
+      <label for="quantityRequested">Quantity Requested</label>
+      <input type="number" id="quantityRequested" name="quantityRequested" required placeholder="Enter quantity needed" />
+
+      <label for="expiryDate">Preferred Expiry Date</label>
+      <input type="date" id="expiryDate" name="expiryDate" required />
+
+      <label for="specialRequests">Special Requests</label>
+      <textarea id="specialRequests" name="specialRequests" placeholder="Any additional needs or details..."></textarea>
+
+      <button type="submit">Submit Request</button>
+    </form>
   </div>
 
-  <div class="surplus-container" id="surplusContainer"></div>
-
-  <div class="load-more">
-    <button onclick="loadMore()">Load More</button>
-  </div>
-
-  <footer>
-    © 2025 Food Rescue Network - Retail Surplus
-  </footer>
-
-  <div class="modal" id="requestModal">
-    <div class="modal-content">
-      <h2>Request Sent!</h2>
-      <p id="modalItemName">Your request has been submitted.</p>
-      <button onclick="closeModal()">OK</button>
-    </div>
+  <div class="requests-section">
+    <h2 class="section-title">My Requests</h2>
+    <div id="myRequestsContainer" class="listings"></div>
   </div>
 
   <script>
-    const items = [
-      { name: "Fresh Produce Bundle", category: "produce", quantity: 20, expiry: "2 days", description: "Assorted fruits & vegetables", tags: ["Urgent"] },
-      { name: "Dairy Products", category: "dairy", quantity: 30, expiry: "3 days", description: "Milk, cheese, yogurt", tags: [] },
-      { name: "Bread & Baked Goods", category: "bakery", quantity: 50, expiry: "1 day", description: "Bread, rolls, pastries", tags: ["Urgent"] },
-      { name: "Canned & Packaged Items", category: "canned", quantity: 100, expiry: "60 days", description: "Canned goods", tags: [] },
-      { name: "Frozen Meals", category: "frozen", quantity: 40, expiry: "30 days", description: "Microwave-ready meals", tags: ["Frozen"] },
-      { name: "Frozen Vegetables", category: "frozen", quantity: 25, expiry: "45 days", description: "Frozen peas, corn, etc.", tags: ["Frozen"] }
-    ];
+    async function submitRequest(event) {
+      event.preventDefault();
 
-    let visibleItems = 4;
-    let isListView = false;
+      const organizationName = document.getElementById('organizationName').value.trim();
+      const contactPerson = document.getElementById('contactPerson').value.trim();
+      const contactNumber = document.getElementById('contactNumber').value.trim();
+      const itemRequested = document.getElementById('itemRequested').value.trim();
+      const quantityRequested = document.getElementById('quantityRequested').value.trim();
+      const expiryDate = document.getElementById('expiryDate').value;
+      const specialRequests = document.getElementById('specialRequests').value.trim();
 
-    function renderCards() {
-      const container = document.getElementById('surplusContainer');
-      container.innerHTML = '';
-      const filtered = getFilteredSortedItems();
-      const displayed = filtered.slice(0, visibleItems);
-      displayed.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'surplus-card';
-        const expiryDate = formatExpiryDate(item.expiry);
-        card.innerHTML = `
-          <h3>${item.name}</h3>
-          <div>${item.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}</div>
-          <p>${item.description}</p>
-          <div class="progress"><div class="progress-bar" style="width: ${item.quantity}%"></div></div>
-          <div class="info">Quantity: ${item.quantity}<br>Expires on: ${expiryDate}</div>
-          <button onclick="openModal('${item.name}')">Request</button>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function parseDays(expiry) {
-      const match = expiry.match(/(\d+)/);
-      return match ? parseInt(match[1], 10) : Infinity;
-    }
-
-    function formatExpiryDate(expiry) {
-      const days = parseDays(expiry);
-      const date = new Date();
-      date.setDate(date.getDate() + days);
-      return date.toLocaleDateString();
-    }
-
-    function getFilteredSortedItems() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('categoryFilter').value;
-      const sort = document.getElementById('sortQuantity').value;
-
-      let filtered = items.filter(i =>
-        i.name.toLowerCase().includes(search) &&
-        (!category || i.category === category)
-      );
-
-      if (sort === 'asc') {
-        filtered.sort((a, b) => a.quantity - b.quantity);
-      } else if (sort === 'desc') {
-        filtered.sort((a, b) => b.quantity - a.quantity);
-      } else if (sort === 'expirySoonest') {
-        filtered.sort((a, b) => parseDays(a.expiry) - parseDays(b.expiry));
-      } else if (sort === 'expiryLatest') {
-        filtered.sort((a, b) => parseDays(b.expiry) - parseDays(a.expiry));
+      if (!organizationName || !contactPerson || !contactNumber || !itemRequested || !quantityRequested || !expiryDate) {
+        alert("Please fill in all required fields.");
+        return;
       }
 
-      return filtered;
+      const requestData = {
+        organizationName,
+        contactPerson,
+        contactNumber,
+        itemRequested,
+        quantityRequested,
+        expiryDate,
+        specialRequests
+      };
+
+      try {
+        const response = await fetch('/api/add-surplus-request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit request");
+        }
+
+        alert("Request submitted successfully!");
+        document.getElementById('requestForm').reset();
+        renderRequests();
+      } catch (error) {
+        console.error("Error submitting request:", error);
+        alert("An error occurred. Please try again.");
+      }
     }
 
-    function loadMore() {
-      visibleItems += 2;
-      renderCards();
+    async function renderRequests() {
+      const container = document.getElementById("myRequestsContainer");
+      container.innerHTML = '';
+
+      try {
+        const response = await fetch('/api/get-surplus-requests');
+        if (!response.ok) {
+          throw new Error("Failed to fetch requests");
+        }
+
+        const requests = await response.json();
+
+        if (requests.length === 0) {
+          container.innerHTML = "<p>No requests available yet. Please add a request!</p>";
+          return;
+        }
+
+        requests.forEach((req) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <h3>${req.itemRequested || 'N/A'}</h3>
+            <p>
+              <strong>Organization:</strong> ${req.organizationName || 'N/A'}<br>
+              <strong>Contact:</strong> ${req.contactPerson || 'N/A'} (${req.contactNumber || 'N/A'})<br>
+              <strong>Quantity:</strong> ${req.quantityRequested || 'N/A'}<br>
+              <strong>Expiry Date:</strong> ${req.expiryDate || 'N/A'}<br>
+              <strong>Special Requests:</strong> ${req.specialRequests || 'None'}
+            </p>
+            <button onclick="handleRequestOrder(${req.id}, this)">Request Order</button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+        container.innerHTML = "<p>Failed to load requests.</p>";
+      }
     }
 
-    function filterCards() {
-      visibleItems = 4;
-      renderCards();
+    async function handleRequestOrder(requestId, button) {
+      try {
+        const response = await fetch(`/api/request-order/${requestId}`, {
+          method: 'POST',
+        });
+
+        if (response.ok) {
+          alert('Order requested successfully!');
+          button.textContent = "Requested ✅";
+          button.disabled = true;
+          button.style.backgroundColor = "#a5d6a7";
+          button.style.cursor = "default";
+        } else {
+          const errorData = await response.json();
+          alert(errorData.error || 'Failed to request order.');
+        }
+      } catch (error) {
+        console.error("Error requesting order:", error);
+        alert('An error occurred. Please try again.');
+      }
     }
 
-    function openModal(itemName) {
-      document.getElementById('modalItemName').textContent = `Your request for "${itemName}" has been submitted.`;
-      document.getElementById('requestModal').style.display = 'flex';
+    async function checkSession() {
+      const response = await fetch('/api/check-session');
+      const data = await response.json();
+
+      if (!data.logged_in) {
+        alert("You must be logged in to view your requests.");
+        window.location.href = "/login.html"; // Redirect to login page
+      }
     }
 
-    function closeModal() {
-      document.getElementById('requestModal').style.display = 'none';
-    }
-
-    function toggleView() {
-      isListView = !isListView;
-      document.body.classList.toggle('list-view', isListView);
-    }
-
-    renderCards();
+    window.onload = async () => {
+      await checkSession();
+      renderRequests();
+    };
   </script>
 </body>
 </html>

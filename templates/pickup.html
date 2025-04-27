@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pickup Schedule | Food Rescue Network</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <style>
     * {
       box-sizing: border-box;
@@ -13,7 +14,7 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #e6fffa, #c6f6d5);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       color: #2f855a;
       min-height: 100vh;
       display: flex;
@@ -158,82 +159,13 @@
       box-shadow: 0 0 12px #9ae6b4;
     }
 
-    .fab {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background-color: #38a169;
-      color: white;
-      font-size: 1.4rem;
-      padding: 14px 18px;
-      border-radius: 50%;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .fab:hover {
-      background-color: #2f855a;
-      transform: scale(1.1);
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-content input {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px;
-      border: 1px solid #c6f6d5;
-      border-radius: 8px;
-    }
-
-    .notification {
-      margin-top: 15px;
-      color: #2f855a;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #38a169;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-      z-index: 10000;
+    footer a {
+      color: #388e3c;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  
-
   <h1>Available Pickups</h1>
   <p class="subtitle">Review and manage upcoming pickups</p>
 
@@ -249,81 +181,58 @@
   <div class="table-wrapper">
     <table id="scheduleTable">
       <thead>
-        <tr>
-          <th>Partner</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Location</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+  <tr>
+    <th>Partner</th>
+    <th>Date</th>
+    <th>Food Type</th>
+    <th>Location</th>
+    <th>Status</th>
+  </tr>
+</thead>
       <tbody>
-        <tr>
-          <td>Helping Hands</td>
-          <td>April 8, 2025</td>
-          <td>10:00 AM - 11:00 AM</td>
-          <td>Kanpur</td>
-          <td><span class="status Confirmed">Confirmed</span></td>
-          <td><button onclick="openModal(this)">Reschedule</button></td>
-        </tr>
-        <tr>
-          <td>Agri Fertilizer Co.</td>
-          <td>April 10, 2025</td>
-          <td>2:30 PM - 3:00 PM</td>
-          <td>Lucknow</td>
-          <td><span class="status Pending Confirmation">Pending Confirmation</span></td>
-          <td><button onclick="openModal(this)">Edit</button></td>
-        </tr>
+        <!-- Rows will be dynamically populated -->
       </tbody>
     </table>
     <div class="notification" id="notif">✔ Schedule updated successfully!</div>
   </div>
 
-  <div class="modal" id="editModal">
-    <div class="modal-content">
-      <h2>Edit Pickup</h2>
-      <input type="text" id="editDate" placeholder="New Date (e.g., April 12, 2025)">
-      <input type="text" id="editTime" placeholder="New Time (e.g., 1:00 PM - 2:00 PM)">
-      <button onclick="saveChanges()">Save Changes</button>
-    </div>
-  </div>
-
-  
-
   <footer>
-    © 2025 Food Rescue Network. All rights reserved.
+    © 2025 Food Rescue Network. All rights reserved. <a href="t&c.html">Terms and Conditions</a>
   </footer>
 
   <script>
-    let currentRow;
-
-    function openModal(button) {
-      currentRow = button.closest("tr");
-      document.getElementById("editModal").style.display = "flex";
+    async function fetchPickups() {
+  try {
+    const response = await fetch('/api/get-requested-items');
+    if (!response.ok) {
+      throw new Error('Failed to fetch pickups');
     }
 
-    function saveChanges() {
-      const newDate = document.getElementById("editDate").value;
-      const newTime = document.getElementById("editTime").value;
-      if (newDate) currentRow.cells[1].textContent = newDate;
-      if (newTime) currentRow.cells[2].textContent = newTime;
-      document.getElementById("editModal").style.display = "none";
-      document.getElementById("notif").style.display = "block";
-      setTimeout(() => {
-        document.getElementById("notif").style.display = "none";
-      }, 2500);
-    }
+    const pickups = await response.json();
+    const tableBody = document.querySelector('#scheduleTable tbody');
+    tableBody.innerHTML = '';
 
-    window.onclick = function(event) {
-      const modal = document.getElementById("editModal");
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    }
+    pickups.forEach(pickup => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${pickup.partner}</td>
+        <td>${pickup.date}</td>
+        <td>${pickup.foodType}</td>
+        <td>${pickup.location}</td>
+        <td><span class="status ${pickup.status.replace(' ', '\\ ')}">${pickup.status}</span></td>
+      `;
+      tableBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error fetching pickups:', error);
+  }
+}
+
+// Call the function to fetch and display pickups
+fetchPickups();
 
     function filterTable(query) {
-      const rows = document.querySelectorAll("#scheduleTable tbody tr");
+      const rows = document.querySelectorAll('#scheduleTable tbody tr');
       rows.forEach(row => {
         const partner = row.cells[0].textContent.toLowerCase();
         row.style.display = partner.includes(query.toLowerCase()) ? '' : 'none';
@@ -331,15 +240,11 @@
     }
 
     function filterStatus(status) {
-      const rows = document.querySelectorAll("#scheduleTable tbody tr");
+      const rows = document.querySelectorAll('#scheduleTable tbody tr');
       rows.forEach(row => {
         const cellStatus = row.cells[4].textContent.trim();
         row.style.display = !status || cellStatus === status ? '' : 'none';
       });
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("dark-mode");
     }
   </script>
 </body>

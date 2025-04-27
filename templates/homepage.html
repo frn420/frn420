@@ -1,278 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Food Rescue Network</title>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #dcedc8, #c5e1a5);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e9f7f1, #d0f4f0);
       padding-top: 80px;
+      color: #333;
     }
-
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 3rem;
+      padding: 1rem 2rem;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #e8f5e9;
-      backdrop-filter: blur(10px);
-      -webkit-background-filter: blur(10px);
+      top: 0; left: 0; right: 0;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       z-index: 999;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      transition: box-shadow 0.3s ease-in-out;
     }
-
-    header h1 {
-      font-size: 1.8rem;
-      color: #4caf50;
-      font-weight: 700;
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       cursor: pointer;
     }
-
+    .logo-container img {
+      height: 59px;
+      width: 47.5px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    header h1 {
+      font-size: 1.6rem;
+      color: #2c6b2f;
+      font-weight: 700;
+    }
     nav {
       display: flex;
       gap: 1rem;
+      align-items: center;
     }
-
     nav a {
       text-decoration: none;
-      font-weight: bold;
-      color: #4caf50;
-      padding: 0.5rem 1.2rem;
+      font-weight: 600;
+      color: #2c6b2f;
+      padding: 0.6rem 1rem;
       border-radius: 8px;
-      transition: background 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: 0.3s;
     }
-
     nav a:hover {
-      background-color: #e8f5e9;
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+      background: #f1f9f4;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
     }
-
     .hero {
-      background: linear-gradient(135deg, #dcedc8, #c5e1a5);
-      padding: 3rem 2rem 4rem;
+      background: linear-gradient(135deg, #a8e6cf, #dcedc8);
+      padding: 6rem 2rem;
       text-align: center;
-      color: #1b5e20;
-      position: relative;
+      color: #2c6b2f;
     }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-    }
-
-    .hero > * {
-      position: relative;
-      z-index: 2;
-    }
-
+    .hero h2, .hero p, .hero button { position: relative; z-index: 1; }
     .hero h2 {
-      font-size: 3rem;
+      font-size: 2.8rem;
       margin-bottom: 1rem;
-      animation: fadeInUp 1s ease-in-out;
+      animation: fadeInUp 1s forwards;
     }
-
     .hero p {
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      animation: fadeInUp 1.4s ease-in-out;
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1.2s forwards;
     }
-
     .hero button {
-      background-color: #4caf50;
+      background: #388e3c;
       color: white;
-      padding: 1rem 2rem;
+      padding: 1rem 2.2rem;
       border: none;
       border-radius: 2rem;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
-      animation: fadeInUp 1.4s ease-in-out;
+      animation: fadeInUp 1.5s forwards;
+      transition: 0.3s;
     }
-
     .hero button:hover {
-      background-color: #388e3c;
+      background: #2c6b2f;
+      transform: scale(1.05);
     }
-
     @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-
-    .section {
+    .section, .taglines, .cta, .emergency {
       max-width: 1200px;
       margin: 4rem auto;
       padding: 0 2rem;
-    }
-
-    .section h3 {
       text-align: center;
-      font-size: 2.2rem;
-      color: #2e7d32;
-      margin-bottom: 2rem;
     }
-
+    .section h3, .taglines h3, .cta h3, .emergency h3 {
+      font-size: 2.2rem;
+      color: #388e3c;
+      margin-bottom: 1.5rem;
+    }
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 2rem;
+      margin-top: 2rem;
     }
-
     .card {
-      background: white;
+      background: #fff;
       padding: 2rem;
       border-radius: 1.5rem;
-      box-shadow: 0 10px 30px rgba(139, 195, 74, 0.2);
-      text-align: center;
-      transition: 0.3s ease;
+      box-shadow: 0 10px 30px rgba(76,175,80,0.15);
+      transition: 0.3s;
     }
-
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(76,175,80,0.25);
     }
-
-    .card h4 {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      color: #558b2f;
+    .card h4 { margin: 1rem 0; color: #388e3c; }
+    .card p { color: #666; font-size: 0.95rem; }
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 1rem;
+      color: #2c6b2f;
     }
-
-    .taglines {
-      background-color: #f0fdf4;
-      text-align: center;
-      padding: 3rem 2rem;
-    }
-
-    .taglines h3 {
-      font-size: 2rem;
-      color: #33691E;
-      margin-bottom: 1.2rem;
-    }
-
-    .taglines p {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-    }
-
-    .cta {
-      background-color: #dcedc8;
-      padding: 3rem 2rem;
-      text-align: center;
+    .taglines p { font-size: 1.1rem; margin: 0.5rem 0; color: #555; }
+    .cta, .emergency {
       border-radius: 1.5rem;
-      margin: 4rem auto;
-      max-width: 900px;
+      background: #f1f9f4;
+      padding: 2.5rem 2rem;
     }
-
-    .cta h3 {
-      font-size: 2rem;
-      color: #2e7d32;
-      margin-bottom: 1.5rem;
-    }
-
-    .cta button {
-      background-color: #43a047;
+    .cta button, .emergency button {
+      background: #388e3c;
       color: white;
-      padding: 1rem 2.5rem;
+      padding: 0.8rem 2rem;
       border: none;
       border-radius: 2rem;
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 1rem;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: 0.3s;
     }
-
-    .cta button:hover {
-      background-color: #2e7d32;
+    .cta button:hover, .emergency button:hover {
+      background: #2c6b2f;
+      transform: scale(1.05);
     }
-
     .emergency {
-      background-color: #ffebee;
-      padding: 3rem 2rem;
-      text-align: center;
-      border-radius: 1.5rem;
-      margin: 4rem auto;
-      max-width: 900px;
+      background: #ffebee;
+      max-width: 700px;
+      margin: 3rem auto;
     }
-
-    .emergency h3 {
-      font-size: 2rem;
-      color: #c62828;
-      margin-bottom: 1rem;
-    }
-
-    .emergency p {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-      color: #b71c1c;
-    }
-
+    .emergency h3, .emergency p { color: #c62828; }
     .emergency button {
-      background-color: #d32f2f;
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 2rem;
-      font-size: 1.1rem;
-      cursor: pointer;
+      background: #d32f2f;
+      padding: 0.7rem 1.5rem;
+      font-size: 0.9rem;
     }
-
-    .emergency button:hover {
-      background-color: #b71c1c;
-    }
-
     footer {
       text-align: center;
       padding: 2rem;
-      background-color: #f1f8e9;
+      background: #f1f8e9;
+      color: #5d4037;
       font-size: 1rem;
-      color: #5D4037;
-      border-top: 1px solid #cfd8dc;
     }
-
-    @media (max-width: 600px) {
-      .hero h2 {
-        font-size: 2rem;
-      }
-
-      .hero p {
-        font-size: 1rem;
-      }
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .footer-link {
+      color: #388e3c;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .footer-link:hover {
+      color: #2c6b2f;
+      transform: translateY(-2px);
+    }
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .hero h2 { font-size: 2.2rem; }
+      .hero p { font-size: 1.2rem; }
+      nav { width: 100%; flex-wrap: wrap; gap: 0.5rem; }
+      nav a { padding: 0.5rem 0.8rem; font-size: 0.85rem; }
+    }
+    @media (max-width: 500px) {
+      .hero h2 { font-size: 1.8rem; }
+      .hero p { font-size: 1rem; }
+      .features { grid-template-columns: 1fr; }
+      .logo-container img { height: 30px; width: 30px; }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1 onclick="window.location.href='/'" style="cursor: pointer;">Food Rescue Network</h1>
+    <div class="logo-container" onclick="window.location.href='/'">
+      <img src="/static/web_photo/logo.jpg" alt="Logo">
+      <h1>Food Rescue Network</h1>
+    </div>
     <nav id="navLinks"></nav>
   </header>
 
@@ -293,104 +235,104 @@
     <h3>Why Choose Food Rescue Network?</h3>
     <div class="features">
       <div class="card">
+        <div class="card-icon" data-lucide="recycle"></div>
         <h4>Reduce Waste</h4>
         <p>Help the planet by redirecting surplus food to those who truly need it.</p>
       </div>
       <div class="card">
+        <div class="card-icon" data-lucide="users"></div>
         <h4>Support Communities</h4>
         <p>Connect restaurants, events, and donors with shelters and NGOs.</p>
       </div>
       <div class="card">
+        <div class="card-icon" data-lucide="smartphone"></div>
         <h4>Easy to Use</h4>
-        <p>A user-friendly app to track, donate, and request food with a few taps.</p>
-      </div>
-      <div class="card">
-        <h4>Be the Change</h4>
-        <p>Every action counts. Join us and become a food hero today!</p>
+        <p>A user-friendly app to track, donate, and request food with just a few taps.</p>
       </div>
     </div>
   </section>
 
   <section id="emergencySection" class="emergency">
     <h3>Emergency Food Relief</h3>
-    <p>In times of crisis, every moment matters. Access urgent food support or contribute to relief efforts during natural disasters, pandemics, and more.</p>
+    <p>In times of crisis, every moment matters. Access urgent food support or contribute to relief efforts.</p>
     <button onclick="window.location.href='emergency.html'">Access Relief</button>
   </section>
 
   <section class="cta">
-    <h3>So What are you waiting for?</h3>
+    <h3>So what are you waiting for?</h3>
     <h2>Make an Impact Today!</h2>
+    <button onclick="window.location.href='signup.html'">Donate Now</button>
   </section>
 
   <footer>
-    &copy; 2025 Food Rescue Network. All rights reserved.
+    <div class="footer-content">
+      &copy; 2025 Food Rescue Network. All rights reserved.
+      <a href="t&c.html" class="footer-link">Terms & Conditions</a>
+    </div>
   </footer>
 
   <script>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const nav = document.getElementById("navLinks");
-    const heroButtons = document.getElementById("heroButtons");
+    document.addEventListener("DOMContentLoaded", async () => {
+      const nav = document.getElementById("navLinks");
+      const heroButtons = document.getElementById("heroButtons");
 
-    try {
-      // Check if the user is logged in
-      const response = await fetch("/api/check-session");
-      const result = await response.json();
+      try {
+        // Fetch the user's login status from the backend
+        const response = await fetch('/api/check-session');
+        const data = await response.json();
 
-      if (result.logged_in) {
-        // User is logged in, update the navigation
-        nav.innerHTML = `
-          <a href="#">👤 ${result.user_name}</a>
-          <a href="#" onclick="logout()" style="color:red;">Logout</a>
-          <a href="#emergencySection" onclick="scrollToEmergency(event)" style="background-color: #d32f2f; color: white; padding: 0.5rem 1rem; border-radius: 8px;">Emergency Relief</a>
-        `;
-
-        heroButtons.innerHTML = `
-          <button onclick="window.location.href='dashboard.html'" style="background-color: #4caf50;">Dashboard</button>
-        `;
-      } else {
-        // User is not logged in, show default navigation
-        nav.innerHTML = `
-          <a href="#">Home</a>
-          <a href="login.html">Login</a>
-          <a href="signup.html">Join Us</a>
-          <a href="#emergencySection" onclick="scrollToEmergency(event)" style="background-color: #d32f2f; color: white; padding: 0.5rem 1rem; border-radius: 8px;">Emergency Relief</a>
-        `;
-
-        heroButtons.innerHTML = `
-          <button onclick="window.location.href='signup.html'" style="background-color: #4caf50;">Donate Now</button>
-        `;
+        if (data.logged_in) {
+          // User is logged in
+          nav.innerHTML = `
+            <a href="#"><i data-lucide="user"></i> ${data.user_name}</a>
+            <a href="#" onclick="logout()" style="color:red;"><i data-lucide="log-out"></i> Logout</a>
+            <a href="#emergencySection" style="background:#d32f2f; color:white;"><i data-lucide="alert-triangle"></i> Emergency Food Relief</a>
+          `;
+          heroButtons.innerHTML = `<button onclick="window.location.href='dashboard.html'">Go to Dashboard</button>`;
+        } else {
+          // User is not logged in
+          nav.innerHTML = `
+            <a href="#" id="homeButton"><i data-lucide="home"></i> Home</a>
+            <a href="login.html"><i data-lucide="log-in"></i> Login</a>
+            <a href="signup.html"><i data-lucide="user-plus"></i> Join Us</a>
+            <a href="#emergencySection" style="background:#d32f2f; color:white;"><i data-lucide="alert-triangle"></i> Emergency Food Relief</a>
+          `;
+          heroButtons.innerHTML = `<button onclick="window.location.href='signup.html'">Donate Now</button>`;
+        }
+      } catch (error) {
+        console.error('Error fetching user session:', error);
       }
-    } catch (error) {
-      console.error("Error checking session:", error);
-    }
-  });
 
-  async function logout() {
-    try {
-      const response = await fetch("/api/logout", { method: "POST" });
-      if (response.ok) {
-        alert("Logged out successfully!");
-        window.location.href = "/";
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", e => {
+          e.preventDefault();
+          const target = document.querySelector(anchor.getAttribute("href"));
+          if (target) {
+            window.scrollTo({ top: target.offsetTop - 100, behavior: "smooth" });
+          }
+        });
+      });
+
+      const homeButton = document.getElementById("homeButton");
+      if (homeButton) {
+        homeButton.addEventListener("click", e => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       }
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  }
 
-  function scrollToEmergency(event) {
-    event.preventDefault(); // Prevent the default anchor behavior
-    const emergencySection = document.getElementById("emergencySection");
-    const offset = -100; // Adjust this value to scroll slightly above the section
-    const bodyRect = document.body.getBoundingClientRect().top;
-    const elementRect = emergencySection.getBoundingClientRect().top;
-    const elementPosition = elementRect - bodyRect;
-    const offsetPosition = elementPosition + offset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
+      lucide.createIcons();
     });
-  }
-</script>
+
+    // Logout function to clear session on the server
+    function logout() {
+      fetch('/api/logout', { method: 'POST' })
+        .then(() => {
+          window.location.href = "/";
+        })
+        .catch(error => console.error('Error logging out:', error));
+    }
+  </script>
 </body>
 </html>

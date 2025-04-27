@@ -1,45 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Donation Guidelines</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #e8f5e9;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
+      color: #2f855a;
       margin: 0;
       padding: 0;
     }
 
     .guidelines-container {
-      max-width: 700px;
+      max-width: 800px;
       margin: 60px auto;
-      padding: 20px;
+      padding: 30px;
       background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 30px;
-      color: #2e7d32;
-      font-size: 28px;
+      margin-bottom: 40px;
+      color: #22543d;
+      font-size: 32px;
+      font-weight: 700;
     }
 
     .faq-item {
       border-bottom: 1px solid #c8e6c9;
       cursor: pointer;
-      padding: 18px 0;
+      padding: 20px 0;
+      transition: background-color 0.3s ease;
     }
 
     .faq-question {
       display: flex;
       justify-content: space-between;
       font-size: 18px;
-      color: #2e7d32;
+      color: #22543d;
       font-weight: 600;
     }
 
@@ -49,8 +53,8 @@
       opacity: 0;
       transition: max-height 0.5s ease, opacity 0.5s ease;
       font-size: 16px;
-      color: #555;
-      margin-top: 10px;
+      color: #4a5568;
+      margin-top: 12px;
       line-height: 1.6;
     }
 
@@ -61,11 +65,54 @@
 
     .faq-item.active .faq-icon {
       transform: rotate(45deg);
+      color: #388e3c;
     }
 
     .faq-icon {
       transition: transform 0.3s ease;
       font-weight: bold;
+      color: #22543d;
+    }
+
+    .faq-item:hover {
+      background-color: #f1fdf4;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 40px auto;
+      background-color: #dcedc8;
+      color: #22543d;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #c5e1a5;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #4a5568;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    footer a {
+      color: #388e3c;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -154,7 +201,21 @@
       <div class="faq-answer">Follow any local regulations and community guidelines related to food safety and donation practices.</div>
     </div>
 
+    <div class="faq-item">
+      <div class="faq-question">
+        11. Donate Non-Edible Food to Biofertilizer Companies
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">If you have food scraps or non-edible items, consider donating them to a biofertilizer company.</div>
+    </div>
+
+    <a href="donor.html" class="back-btn">← Back to Donor Dashboard</a>
+
   </div>
+
+  <footer>
+    © 2025 Food Rescue Network. All rights reserved. <a href="t&c.html">Terms and Conditions</a>
+  </footer>
 
   <script>
     const faqItems = document.querySelectorAll('.faq-item');

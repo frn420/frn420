@@ -9,7 +9,7 @@ from sqlalchemy import text  # Import the text function
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Generate a random secret key
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:TNalENeyrMdWHlLzNyNnrQVEHLljEiKQ@postgres.railway.internal:5432/railway'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:v@localhost:5432/FRN2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking for performance
 
 dp = SQLAlchemy(app)
@@ -89,6 +89,27 @@ class NGORequirement(dp.Model):
     pickup_location = dp.Column(dp.String(255), nullable=False)
     contact = dp.Column(dp.String(15), nullable=False)
     timestamp = dp.Column(dp.DateTime, default=dp.func.current_timestamp(), nullable=False)
+
+class SurplusRequest(dp.Model):
+    __tablename__ = 'surplus_request'
+    id = dp.Column(dp.Integer, primary_key=True)
+    user_id = dp.Column(dp.Integer, nullable=False)  # Foreign key to associate with the user
+    organization_name = dp.Column(dp.String(100), nullable=False)
+    contact_person = dp.Column(dp.String(100), nullable=False)
+    contact_number = dp.Column(dp.String(15), nullable=False)
+    item_requested = dp.Column(dp.String(50), nullable=False)
+    quantity_requested = dp.Column(dp.Integer, nullable=False)
+    expiry_date = dp.Column(dp.Date, nullable=False)
+    special_requests = dp.Column(dp.Text, nullable=True)
+
+class RequestedItem(dp.Model):
+    __tablename__ = 'requested_items'
+    id = dp.Column(dp.Integer, primary_key=True)
+    partner = dp.Column(dp.String(100), nullable=False)  # Name of the partner
+    date = dp.Column(dp.Date, nullable=False)  # Date of the request
+    location = dp.Column(dp.String(255), nullable=False)  # Location of the request
+    food_type = dp.Column(dp.String(50), nullable=False, default="Non-Edible")  # Food type
+    status = dp.Column(dp.String(50), nullable=False, default="Pending Confirmation")  # Status of the request
 
 with app.app_context():
     dp.create_all()
@@ -185,6 +206,14 @@ def receiver():
 def biofertilizer():
     return render_template('biofertilizer.html')
 
+@app.route('/t&c.html')
+def terms_and_conditions():
+    return render_template('t&c.html')
+
+@app.route('/emergency_faq.html')
+def emergency_faq():
+    return render_template('emergency_faq.html')
+
 @app.route('/apply.html')
 def apply():
     return render_template('apply.html')
@@ -273,11 +302,9 @@ def api_login():
         return jsonify({"error": "Invalid email or password"}), 401
 
     # Set session variables
-    session['user_id'] = user.id
+    session['id'] = user.id  # Set the user's ID in the session
     session['user_name'] = user.name
     session['logged_in'] = True
-
-    print("Session data:", session)
 
     return jsonify({"message": "Login successful"}), 200
 
@@ -469,17 +496,42 @@ def get_food_aid_requests():
 @app.route('/api/add-biofertilizer', methods=['POST'])
 def add_biofertilizer():
     data = request.json
-    new_listing = BiofertilizerListing(
-        company_name=data['companyName'],
-        material_type=data['materialType'],
-        quantity=data['quantity'],
-        pickup_date=data['pickupDate'],
-        pickup_location=data['pickupLocation'],
-        contact=data['contact']
-    )
-    dp.session.add(new_listing)
-    dp.session.commit()
-    return jsonify({"message": "Biofertilizer listing added successfully!"}), 201
+    try:
+        # Validate required fields
+        required_fields = ['companyName', 'materialType', 'quantity', 'pickupDate', 'pickupLocation', 'contact']
+        for field in required_fields:
+            if field not in data or not data[field]:
+                raise ValueError(f"{field} is required")
+
+        # Validate quantity
+        if not isinstance(data['quantity'], (int, float)) or data['quantity'] <= 0:
+            raise ValueError("Quantity must be a positive number")
+
+        # Validate pickupDate
+        from datetime import datetime
+        try:
+            datetime.strptime(data['pickupDate'], '%Y-%m-%d')
+        except ValueError:
+            raise ValueError("Invalid date format for pickupDate. Expected YYYY-MM-DD")
+
+        # Save the listing to the database
+        new_listing = BiofertilizerListing(
+            company_name=data['companyName'],
+            material_type=data['materialType'],
+            quantity=data['quantity'],
+            pickup_date=data['pickupDate'],
+            pickup_location=data['pickupLocation'],
+            contact=data['contact']
+        )
+        dp.session.add(new_listing)
+        dp.session.commit()
+        return jsonify({"message": "Biofertilizer listing added successfully!"}), 201
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        dp.session.rollback()
+        print(f"Error in /api/add-biofertilizer: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/get-biofertilizers', methods=['GET'])
 def get_biofertilizers():
@@ -531,6 +583,158 @@ def get_ngo_requirements():
         for req in requirements
     ]
     return jsonify(result)
+
+@app.route('/api/add-surplus-request', methods=['POST'])
+def add_surplus_request():
+    data = request.json
+    user_id = session.get('id')  # Use 'id' from the session
+    if not user_id:
+        return jsonify({'error': 'Unauthorized access'}), 401
+
+    organization_name = data.get('organizationName')
+    contact_person = data.get('contactPerson')
+    contact_number = data.get('contactNumber')
+    item_requested = data.get('itemRequested')
+    quantity_requested = data.get('quantityRequested')
+    expiry_date = data.get('expiryDate')
+    special_requests = data.get('specialRequests')
+
+    # Validate required fields
+    if not all([organization_name, contact_person, contact_number, item_requested, quantity_requested, expiry_date]):
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    try:
+        # Save to database
+        new_request = SurplusRequest(
+            user_id=user_id,  # Associate the request with the logged-in user
+            organization_name=organization_name,
+            contact_person=contact_person,
+            contact_number=contact_number,
+            item_requested=item_requested,
+            quantity_requested=quantity_requested,
+            expiry_date=expiry_date,
+            special_requests=special_requests
+        )
+        dp.session.add(new_request)
+        dp.session.commit()
+
+        return jsonify({'message': 'Request added successfully'}), 201
+    except Exception as e:
+        dp.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/get-surplus-requests', methods=['GET'])
+def get_surplus_requests():
+    try:
+        # Ensure the user is logged in
+        user_id = session.get('id')  # Use 'id' from the session
+        print("Session data:", session)  # Debugging: Print session data
+        if not user_id:
+            return jsonify({'error': 'Unauthorized access'}), 401
+
+        # Fetch requests for the logged-in user
+        requests = SurplusRequest.query.filter_by(user_id=user_id).all()
+        result = [
+            {
+                "id": req.id,
+                "organizationName": req.organization_name,
+                "contactPerson": req.contact_person,
+                "contactNumber": req.contact_number,
+                "itemRequested": req.item_requested,
+                "quantityRequested": req.quantity_requested,
+                "expiryDate": req.expiry_date.strftime('%Y-%m-%d'),
+                "specialRequests": req.special_requests
+            }
+            for req in requests
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in /api/get-surplus-requests: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@app.route('/api/get-pickups', methods=['GET'])
+def get_pickups():
+    try:
+        # Fetch data from the BiofertilizerListing table
+        biofertilizer_pickups = BiofertilizerListing.query.all()
+
+        # Format the data for the pickup schedule
+        result = [
+            {
+                "partner": listing.company_name,  # Use company name as the partner
+                "date": listing.pickup_date.strftime('%Y-%m-%d'),  # Format the pickup date
+                "foodType": "Non-Edible",  # Set food type as Non-Edible for biofertilizer
+                "location": listing.pickup_location,  # Use pickup location
+                "status": "Confirmed"  # Default status for biofertilizer pickups
+            }
+            for listing in biofertilizer_pickups
+        ]
+
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching pickups: {e}")
+        return jsonify({"error": "Failed to fetch pickups"}), 500
+
+requested_items = []  # Temporary storage for requested items
+
+@app.route('/api/add-requested-item', methods=['POST'])
+def add_requested_item():
+    data = request.json
+    try:
+        # Log the incoming data for debugging
+        print("Received data:", data)
+
+        # Validate required fields
+        required_fields = ['partner', 'date', 'location', 'foodType']
+        for field in required_fields:
+            if field not in data or not data[field]:
+                raise ValueError(f"{field} is required")
+
+        # Save the requested item to the database
+        new_requested_item = RequestedItem(
+            partner=data['partner'],
+            date=data['date'],
+            location=data['location'],
+            food_type=data['foodType'],  # Food type is passed from the frontend
+            status="Pending Confirmation"  # Default status
+        )
+        dp.session.add(new_requested_item)
+        dp.session.commit()
+
+        print("Requested item saved successfully!")  # Log success
+        return jsonify({"message": "Requested item added successfully!"}), 201
+    except ValueError as ve:
+        print(f"Validation error: {ve}")  # Log validation errors
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        dp.session.rollback()
+        print(f"Error adding requested item: {e}")  # Log unexpected errors
+        return jsonify({"error": "Internal server error"}), 500
+
+
+@app.route('/api/get-requested-items', methods=['GET'])
+def get_requested_items():
+    try:
+        # Fetch all requested items from the database
+        requested_items = RequestedItem.query.all()
+
+        # Format the data for the frontend
+        result = [
+            {
+                "partner": item.partner,
+                "date": item.date.strftime('%Y-%m-%d'),
+                "foodType": item.food_type,
+                "location": item.location,
+                "status": item.status
+            }
+            for item in requested_items
+        ]
+
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching requested items: {e}")
+        return jsonify({"error": "Failed to fetch requested items"}), 500
 
 if __name__ == "__main__":
     import os

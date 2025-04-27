@@ -1,97 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Donation</title>
-    <style>
-        /* Reset basic styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Match Your Donation</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Body and background */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2f855a;
-            background:linear-gradient(135deg, #f0fdf4, #c6f6d5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: #2f855a;
+    }
 
-        /* Container to hold the content */
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
-        }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      max-width: 960px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transition: transform 0.3s ease;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #2f855a;
-        }
+    .card:hover {
+      transform: scale(1.005);
+    }
 
-        .description {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #555;
-        }
+    .card-section {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        /* Style for buttons */
-        .button {
-            font-size: 1.2rem;
-            padding: 18px 40px;
-            margin: 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            width: 230px;
-            background: #38a169; /* Green gradient for buttons */
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 128, 0, 0.2);
-            text-transform: uppercase;
-            font-weight: bold;
-            transition: all 0.4s ease;
-        }
+    .card-section.left {
+      background: linear-gradient(135deg, #a8e6cf, #e9f7f1);
+      text-align: center;
+    }
 
-        .button:hover {
-            transform: translateY(-4px);
-            background: #2f855a; /* Hover with a darker green gradient */
-            box-shadow: 0 8px 20px rgba(0, 128, 0, 0.3);
-        }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
 
-        .button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 5px rgba(0, 128, 0, 0.2);
-        }
+    .description {
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      color: #2f855a;
+      line-height: 1.6;
+    }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px;
-                width: 90%;
-            }
-        }
-    </style>
+    .button {
+      font-size: 1rem;
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: 12px;
+      background-color: #38a169;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 128, 0, 0.15);
+      transition: all 0.25s ease;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .button i {
+      font-size: 1.3rem;
+    }
+
+    .button:hover {
+      background-color: #2f855a;
+      box-shadow: 0 6px 16px rgba(0, 128, 0, 0.2);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        grid-template-columns: 1fr;
+      }
+
+      .card-section {
+        padding: 2rem;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>What type of receiver are you looking for?</h1>
-        <p class="description">Select one of the options below based on your food category (For edible- NGO & For not edible- Biofertilizer companies).</p>
-
-        <button class="button" onclick="window.location.href='ngo_listings.html';">NGO Receiver</button>
-        <button class="button" onclick="window.location.href='biofertilizer_listings.html';">Biofertilizer Company Receiver</button>
-    </div>
+<div class="card">
+  <div class="card-section left">
+    <h1>Match Your Donation</h1>
+    <p class="description">Select the right receiver for your donation. NGOs accept edible food; biofertilizer companies repurpose food waste. Retailers handle surplus goods.</p>
+  </div>
+  <div class="card-section">
+    <button class="button" onclick="window.location.href='ngo_listings.html';">
+      <i class="fas fa-hand-holding-heart"></i> NGO Receiver
+    </button>
+    <button class="button" onclick="window.location.href='biofertilizer_listings.html';">
+      <i class="fas fa-seedling"></i> Biofertilizer Receiver
+    </button>
+    <button class="button" onclick="window.location.href='retail_surplus.html';">
+      <i class="fas fa-store"></i> Retail Surplus
+    </button>
+  </div>
+</div>
 
 </body>
 </html>

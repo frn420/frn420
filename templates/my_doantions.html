@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Donations</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 40px;
-      background-color: #f0fdf4;
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
+      color: #2f855a;
     }
 
     h1 {
@@ -18,27 +20,18 @@
       margin-bottom: 40px;
     }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap; /* Allow wrapping if there are too many boxes */
-      justify-content: center;
-      gap: 30px;
-      margin-bottom: 30px;
-    }
-
     .donation {
-      position: relative;
+      gap: 30px;
+      justify-content: center;
       background: white;
       padding: 25px;
-      width: 300px; /* Adjust width for side-by-side layout */
-      height: auto; /* Allow height to adjust dynamically */
+      width: 500px;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       border-left: 8px solid #38a169;
-      display: flex;
-      flex-direction: column; /* Stack content vertically */
-      align-items: center; /* Center-align content */
+      flex-shrink: 0;
     }
 
     .donation:hover {
@@ -90,30 +83,18 @@
       color: #718096;
     }
 
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
     img.food-image {
-      position: relative; /* Remove absolute positioning */
-      width: 120px; /* Adjust size for better visibility */
+      width: 120px;
       height: 120px;
       object-fit: cover;
       border-radius: 8px;
-      margin-bottom: 16px; /* Add spacing below the image */
-    }
-
-    .nutrients {
-      margin-top: 16px;
-      font-size: 0.9rem;
-      color: #4a5568;
-      text-align: center; /* Center-align the nutrients */
-    }
-
-    .nutrients h4 {
-      margin-bottom: 8px;
-      font-size: 1.2rem;
-      color: #2d3748;
-    }
-
-    .nutrients p {
-      margin: 4px 0;
     }
   </style>
 </head>
@@ -122,7 +103,7 @@
   <div id="donationList"></div>
 
   <script>
-  async function fetchDonation() {
+  async function fetchDonations() {
     try {
       const response = await fetch("/api/my-donations");
       if (!response.ok) {
@@ -130,8 +111,6 @@
       }
 
       const donations = await response.json();
-      console.log(donations); // Debug: Log fetched donations
-
       const donationList = document.getElementById("donationList");
 
       if (donations.length === 0) {
@@ -139,40 +118,48 @@
       } else {
         donations.reverse();
 
-        const row = document.createElement("div");
-        row.className = "row";
+        for (let i = 0; i < donations.length; i += 2) {
+          const row = document.createElement("div");
+          row.className = "row";
 
-        donations.forEach((donation, index) => {
-          const div = document.createElement("div");
-          div.className = "donation";
-          div.innerHTML = `
-            <div>
-              <h3>Donation #${donations.length - index}</h3>
-              <p><strong>Name:</strong> <span class="highlight">${donation.contact_name}</span></p>
-              <p><strong>Food Type:</strong> ${donation.food_type}</p>
-              <p><strong>Quantity:</strong> ${donation.quantity}</p>
-              <p><strong>Selling Price:</strong> ${donation.selling_price}</p>
-              <p><strong>Expiry:</strong> ${donation.expiry}</p>
-              <p><strong>Location:</strong> ${donation.location}</p>
-              <p><strong>Category:</strong> ${donation.food_category}</p>
-              <p><strong>Storage:</strong> ${donation.storage}</p>
-              <p><strong>Contact:</strong> ${donation.contact_phone}</p>
-              <p><strong>Notes:</strong> ${donation.notes || 'None'}</p>
-            </div>
-            <img src="${donation.image_url || 'https://via.placeholder.com/120'}" alt="Food Image" class="food-image">
-            <div class="nutrients">
-              <h4>Food Name: ${donation.food_type || 'N/A'}</h4>
-              <p><strong>Calories:</strong> ${donation.nutrients.calories || 'N/A'}</p>
-              <p><strong>Protein:</strong> ${donation.nutrients.protein || 'N/A'}</p>
-              <p><strong>Carbs:</strong> ${donation.nutrients.carbs || 'N/A'}</p>
-              <p><strong>Fats:</strong> ${donation.nutrients.fats || 'N/A'}</p>
-            </div>
-            <button class="button" onclick="redirectToPickup(${donation.id})">Pickup</button>
-          `;
-          row.appendChild(div);
-        });
+          for (let j = i; j < i + 2 && j < donations.length; j++) {
+            const donation = donations[j];
+            const div = document.createElement("div");
+            div.className = "donation";
+            div.innerHTML = `
+              <div style="display: flex; gap: 16px; align-items: flex-start;">
+                <div>
+                  <h3>Donation #${donations.length - j}</h3>
+                  <p><strong>Name:</strong> <span class="highlight">${donation.contact_name}</span></p>
+                  <p><strong>Food Type:</strong> ${donation.food_type}</p>
+                  <p><strong>Quantity:</strong> ${donation.quantity}</p>
+                  <p><strong>Selling Price:</strong> ${donation.selling_price}</p>
+                  <p><strong>Expiry:</strong> ${donation.expiry}</p>
+                  <p><strong>Location:</strong> ${donation.location}</p>
+                  <p><strong>Category:</strong> ${donation.food_category}</p>
+                  <p><strong>Storage:</strong> ${donation.storage}</p>
+                  <p><strong>Contact:</strong> ${donation.contact_phone}</p>
+                  <p><strong>Notes:</strong> ${donation.notes || 'None'}</p>
+                  <p><small>Submitted: ${new Date(donation.timestamp).toLocaleString()}</small></p>
+                  <button class="button" onclick="redirectToPickup(${donation.id})">Available Pickups</button>
+                </div>
+                <div>
+                  <img src="${donation.image_url || 'https://via.placeholder.com/120'}" alt="Food Image" class="food-image">
+                  <div style="margin-top: 10px;">
+                    <p><strong>Nutrition</strong></p>
+                    <p><strong>Calories:</strong> ${donation.nutrients?.calories || 'N/A'}</p>
+                    <p><strong>Protein:</strong> ${donation.nutrients?.protein || 'N/A'}</p>
+                    <p><strong>Carbs:</strong> ${donation.nutrients?.carbs || 'N/A'}</p>
+                    <p><strong>Fats:</strong> ${donation.nutrients?.fats || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+            row.appendChild(div);
+          }
 
-        donationList.appendChild(row);
+          donationList.appendChild(row);
+        }
       }
     } catch (error) {
       console.error("Error fetching donations:", error);
@@ -180,13 +167,11 @@
     }
   }
 
-  // Redirect to pickup.html with the donation ID
   function redirectToPickup(donationId) {
     window.location.href = `/pickup.html?donationId=${donationId}`;
   }
 
-  // Fetch donations on page load
-  fetchDonation();
-</script>
+  fetchDonations();
+  </script>
 </body>
 </html>

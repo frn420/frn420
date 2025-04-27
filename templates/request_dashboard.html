@@ -3,17 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Request Food Aid Dashboard</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #fff3e0);
-      padding: 40px;
+      font-family: "Inter", sans-serif;
+      background: #fef3f3;
+      color: #7f1d1d;
+      margin: 0;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    h2 {
+    .header-box {
+      background-color: #991b1b;
+      padding: 30px 60px;
+      border-radius: 16px;
+      color: white;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      margin-bottom: 50px;
       text-align: center;
-      color: #00695c;
-      margin-bottom: 30px;
+    }
+
+    .header-box h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
     }
 
     .request-list {
@@ -24,91 +41,110 @@
     }
 
     .request-card {
-      background: white;
+      background: #fff;
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       width: 300px;
-      animation: slideIn 0.4s ease-in-out;
+      transition: transform 0.3s ease;
+      border: 1px solid #fecaca;
+    }
+
+    .request-card:hover {
+      transform: translateY(-5px);
+      background-color: #fff1f1;
     }
 
     .request-card h3 {
       margin-top: 0;
-      color: #d32f2f;
+      color: #b91c1c;
+      font-size: 20px;
     }
 
     .request-card p {
       margin: 5px 0;
       font-size: 0.95rem;
+      color: #4b5563;
     }
 
     .status {
       font-weight: bold;
-      color: green;
+      color: #15803d;
     }
 
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .back-link {
+    .back-btn {
       display: block;
-      text-align: center;
-      margin-top: 30px;
-      font-weight: bold;
-      color: #00796b;
+      margin: 40px auto 0;
+      background-color: #fee2e2;
+      color: #b91c1c;
+      padding: 14px 28px;
+      border-radius: 8px;
       text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      text-align: center;
+      width: fit-content;
     }
 
-    .back-link:hover {
-      text-decoration: underline;
+    .back-btn:hover {
+      background-color: #fca5a5;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <h2>Request Food Aid Dashboard</h2>
+  <div class="header-box">
+    <h2>📦 Request Food Aid Dashboard</h2>
+  </div>
   <div class="request-list" id="requestList"></div>
 
-  <a href="request_food_aid.html" class="back-link">← Request More Food Aid</a>
+  <a href="request_food_aid.html" class="back-btn">← Request More Food Aid</a>
 
   <script>
-  async function fetchRequests() {
-    try {
-      const response = await fetch("/api/food-aid-requests");
-      if (!response.ok) {
-        throw new Error("Failed to fetch food aid requests");
-      }
+    async function fetchRequests() {
+      try {
+        const response = await fetch("/api/food-aid-requests");
+        if (!response.ok) {
+          throw new Error("Failed to fetch food aid requests");
+        }
 
-      const requests = await response.json();
-      const listContainer = document.getElementById("requestList");
+        const requests = await response.json();
+        const listContainer = document.getElementById("requestList");
 
-      if (requests.length === 0) {
-        listContainer.innerHTML = "<p>No food aid requests yet. Be the first to request aid!</p>";
-      } else {
-        requests.forEach(request => {
-          const card = document.createElement("div");
-          card.className = "request-card";
-          card.innerHTML = `
-            <h3>${request.name}</h3>
-            <p><strong>Phone:</strong> ${request.phone}</p>
-            <p><strong>Email:</strong> ${request.email}</p>
-            <p><strong>Location:</strong> ${request.location}</p>
-            <p><strong>Type of Request:</strong> ${request.aidType}</p>
-            <p><strong>Organization Type:</strong> ${request.organizationType}</p>
-            <p><strong>Comments:</strong> ${request.comments || 'None'}</p>
-          `;
-          listContainer.appendChild(card);
-        });
+        if (requests.length === 0) {
+          listContainer.innerHTML = "<p style='text-align:center;'>No food aid requests yet. Be the first to request aid!</p>";
+        } else {
+          requests.forEach(request => {
+            const card = document.createElement("div");
+            card.className = "request-card";
+            card.innerHTML = `
+              <h3>${request.name}</h3>
+              <p><strong>Phone:</strong> ${request.phone}</p>
+              <p><strong>Email:</strong> ${request.email}</p>
+              <p><strong>Location:</strong> ${request.location}</p>
+              <p><strong>Type of Request:</strong> ${request.aidType}</p>
+              <p><strong>Organization Type:</strong> ${request.organizationType}</p>
+              <p><strong>Comments:</strong> ${request.comments || 'None'}</p>
+              <p><strong>Status:</strong> <span class="status">Not Delivered</span></p>
+            `;
+            listContainer.appendChild(card);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching food aid requests:", error);
+        document.getElementById("requestList").innerHTML = "<p>Failed to load food aid requests.</p>";
       }
-    } catch (error) {
-      console.error("Error fetching food aid requests:", error);
-      document.getElementById("requestList").innerHTML = "<p>Failed to load food aid requests.</p>";
     }
-  }
 
-  // Fetch requests on page load
-  fetchRequests();
-</script>
+    // Fetch requests on page load
+    fetchRequests();
+  </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NGO Requirement Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <style>
     * {
       box-sizing: border-box;
@@ -14,61 +15,10 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       color: #2f855a;
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    .toggle-sidebar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background-color: #38a169;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 14px;
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .sidebar {
-      width: 300px;
-      background: #ffffff;
-      border-right: 2px solid #a4e3c1;
-      padding: 20px;
-      height: 100vh;
-      overflow-y: auto;
-      position: fixed;
-      top: 0;
-      left: -320px;
-      transition: all 0.3s ease;
-      z-index: 998;
-    }
-
-    .sidebar.active {
-      left: 0;
-    }
-
-    .sidebar h3 {
-      margin-bottom: 15px;
-      font-size: 1.4rem;
-      color: #22543d;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar li {
-      margin-bottom: 15px;
-      padding: 10px;
-      background-color: #f0fff4;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      font-size: 0.9rem;
-      cursor: pointer;
     }
 
     .main {
@@ -90,42 +40,6 @@
       color: #4a5568;
       margin-bottom: 30px;
       font-size: 1.2rem;
-    }
-
-    .form-container {
-      max-width: 600px;
-      margin: 30px auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-
-    .form-container input,
-    .form-container button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      border: 1px solid #c5e1a5;
-      font-size: 16px;
-    }
-
-    .form-container button {
-      background: #38a169;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      border: none;
-    }
-
-    h2.section-title {
-      text-align: center;
-      font-size: 3rem;
-      font-weight: bold;
-      color: #22543d;
-      margin-top: 40px;
-      margin-bottom: 20px;
     }
 
     .listings {
@@ -186,10 +100,9 @@
 <body>
 
   <div class="main">
-    <h1>NGO Hub</h1>
+    <h1>NGO Requirement Hub</h1>
     <p class="subtitle">Submit your food material needs to connect with potential donors</p>
 
-    
     <div class="listings" id="listingContainer"></div>
 
     <footer>
@@ -199,45 +112,49 @@
 
   <script>
     async function renderNGOListings() {
-  const container = document.getElementById('listingContainer');
-  container.innerHTML = '';
+      const container = document.getElementById('listingContainer');
+      container.innerHTML = '';
 
-  try {
-    const response = await fetch('/api/get-ngo-requirements');
-    if (!response.ok) {
-      throw new Error("Failed to fetch NGO requirements");
+      try {
+        const response = await fetch('/api/get-ngo-requirements');
+        if (!response.ok) {
+          throw new Error("Failed to fetch NGO requirements");
+        }
+
+        const requirements = await response.json();
+
+        if (requirements.length === 0) {
+          container.innerHTML = "<p>No NGO requirements available yet. Please check back later!</p>";
+          return;
+        }
+
+        requirements.forEach(data => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h3>${data.ngoName}</h3>
+            <p>
+              Food: ${data.materialType}<br>
+              Quantity: ${data.quantity} kg<br>
+              Needed by: ${data.pickupDate}<br>
+              Location: ${data.pickupLocation}<br>
+              Contact: ${data.contact}<br>
+            </p>
+            <button onclick="acceptRequest('${data.ngoName}')">Accept Request</button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error fetching NGO requirements:", error);
+        container.innerHTML = "<p>Failed to load NGO requirements.</p>";
+      }
     }
 
-    const requirements = await response.json();
-
-    if (requirements.length === 0) {
-      container.innerHTML = "<p>No NGO requirements available yet. Please check back later!</p>";
-      return;
+    function acceptRequest(ngoName) {
+      alert(`Request accepted for ${ngoName}`);
     }
 
-    requirements.forEach(data => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <h3>${data.ngoName}</h3>
-        <p>
-          Food: ${data.materialType}<br>
-          Quantity: ${data.quantity} kg<br>
-          Needed by: ${data.pickupDate}<br>
-          Location: ${data.pickupLocation}<br>
-          Contact: ${data.contact}<br>
-        </p>
-      `;
-      container.appendChild(card);
-    });
-  } catch (error) {
-    console.error("Error fetching NGO requirements:", error);
-    container.innerHTML = "<p>Failed to load NGO requirements.</p>";
-  }
-}
-
-window.onload = renderNGOListings;
+    window.onload = renderNGOListings;
   </script>
-    
 </body>
 </html>

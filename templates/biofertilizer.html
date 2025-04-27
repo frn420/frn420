@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Biofertilizer Hub</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -14,61 +15,10 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       color: #2f855a;
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    .toggle-sidebar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background-color: #38a169;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 14px;
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .sidebar {
-      width: 300px;
-      background: #ffffff;
-      border-right: 2px solid #a4e3c1;
-      padding: 20px;
-      height: 100vh;
-      overflow-y: auto;
-      position: fixed;
-      top: 0;
-      left: -320px;
-      transition: all 0.3s ease;
-      z-index: 998;
-    }
-
-    .sidebar.active {
-      left: 0;
-    }
-
-    .sidebar h3 {
-      margin-bottom: 15px;
-      font-size: 1.4rem;
-      color: #22543d;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar li {
-      margin-bottom: 15px;
-      padding: 10px;
-      background-color: #f0fff4;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      font-size: 0.9rem;
-      cursor: pointer;
     }
 
     .main {
@@ -181,19 +131,14 @@
       color: #9e9e9e;
       font-size: 0.9rem;
     }
+
+    
   </style>
 </head>
 <body>
 
-  
-
-  <div class="sidebar" id="sidebar">
-    <h3>My Donations</h3>
-    <ul id="donationList"></ul>
-  </div>
-
   <div class="main">
-    <h1>Biofertilizer Hub</h1>
+    <h1>Biofertilizer Company Requirement</h1>
     <p class="subtitle">Explore high-efficiency waste streams for next-gen composting</p>
 
     <div class="form-container">
@@ -208,7 +153,7 @@
     </div>
 
     <h2 class="section-title">My Requests</h2>
-    <div class="listings" id="listingContainer"></div>
+    <div class="listings" id="requestContainer"></div>
 
     <footer>
       ⓒ 2025 | Biofertilizer Division | Food Rescue Network
@@ -216,16 +161,6 @@
   </div>
 
   <script>
-    let listings = JSON.parse(localStorage.getItem('biofertilizerListings')) || [];
-
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('active');
-      if (sidebar.classList.contains('active')) {
-        renderSavedListings(); // Fetch listings when sidebar opens
-      }
-    }
-
     async function saveListing() {
       const name = document.getElementById('companyName').value;
       const type = document.getElementById('materialType').value;
@@ -269,73 +204,118 @@
         document.getElementById('pickupLocation').value = '';
         document.getElementById('contact').value = '';
 
-        renderSavedListings(); // Refresh the listings
+        // Add the new listing to the Request Section
+        addToRequestSection(data);
       } catch (error) {
         console.error("Error:", error);
         alert("An error occurred while adding the listing.");
       }
     }
 
+    function addToRequestSection(data) {
+  const container = document.getElementById('requestContainer');
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  // Check if the item was already requested
+  const requestedItems = JSON.parse(localStorage.getItem('requestedItems')) || [];
+  const isRequested = requestedItems.includes(data.companyName);
+
+  card.innerHTML = `
+    <h3>${data.companyName}</h3>
+    <p>
+      Type: ${data.materialType}<br>
+      ${data.quantity} kg required<br>
+      Required by: ${data.pickupDate}<br>
+      Location: ${data.pickupLocation}<br>
+      Contact: ${data.contact}<br>
+    </p>
+    <button id="request-${data.companyName}" 
+      ${isRequested ? 'disabled style="background-color: #a5d6a7; cursor: default;"' : ''}
+      onclick="requestPickup('${data.companyName}', '${data.pickupDate}', '${data.pickupLocation}')">
+      ${isRequested ? 'Request Sent ✅' : 'Request Order'}
+    </button>
+  `;
+
+  // Prepend the new card to the top of the container
+  container.prepend(card);
+}
+
     async function renderSavedListings() {
-      const container = document.getElementById('listingContainer');
-      const sidebar = document.getElementById('donationList');
+  const container = document.getElementById('requestContainer');
+  container.innerHTML = '';
 
-      container.innerHTML = '';
-      sidebar.innerHTML = '';
+  try {
+    const response = await fetch('/api/get-biofertilizers');
+    if (!response.ok) {
+      throw new Error("Failed to fetch listings");
+    }
 
-      try {
-        const response = await fetch('/api/get-biofertilizers');
-        if (!response.ok) {
-          throw new Error("Failed to fetch listings");
-        }
+    const listings = await response.json();
 
-        const listings = await response.json();
+    if (listings.length === 0) {
+      container.innerHTML = "<p>No listings available yet. Please add a listing!</p>";
+      return;
+    }
 
-        if (listings.length === 0) {
-          container.innerHTML = "<p>No listings available yet. Please add a listing!</p>";
-          return;
-        }
+    listings.forEach(data => {
+      addToRequestSection(data);
+    });
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    container.innerHTML = "<p>Failed to load listings.</p>";
+  }
+}
 
-        listings.forEach(data => {
-          // Add to the main "My Requests" section
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <h3>${data.companyName}</h3>
-            <p>
-              Type: ${data.materialType}<br>
-              ${data.quantity} kg required<br>
-              Required by: ${data.pickupDate}<br>
-              Location: ${data.pickupLocation}<br>
-              Contact: ${data.contact}<br>
-            </p>
-            <button onclick="requestPickup('${data.companyName}')">Request Order</button>
-          `;
-          container.appendChild(card);
+    function requestPickup(companyName, pickupDate, pickupLocation) {
+  // Display the required information
+  alert(`Material request sent for ${companyName}`);
 
-          // Add to the sidebar
-          const listItem = document.createElement('li');
-          listItem.innerHTML = `
-            <strong>${data.companyName}</strong><br>
-            ${data.materialType}, ${data.quantity}kg<br>
-            Pickup by: ${data.pickupDate}<br>
-            Location: ${data.pickupLocation}<br>
-            <hr style="margin: 6px 0;">
-          `;
-          listItem.onclick = () => {
-            document.getElementById('listingContainer').scrollIntoView({ behavior: 'smooth' });
-          };
-          sidebar.appendChild(listItem);
-        });
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-        container.innerHTML = "<p>Failed to load listings.</p>";
+  // Find the button that triggered the event and update its text
+  const button = event.target;
+  button.textContent = "Request Sent ✅";
+  button.disabled = true; // Disable the button to prevent duplicate requests
+  button.style.backgroundColor = "#a5d6a7"; // Change button color to indicate success
+  button.style.cursor = "default"; // Change cursor to default
+
+  // Save the request state in localStorage
+  const requestedItems = JSON.parse(localStorage.getItem('requestedItems')) || [];
+  if (!requestedItems.includes(companyName)) {
+    requestedItems.push(companyName);
+    localStorage.setItem('requestedItems', JSON.stringify(requestedItems));
+  }
+
+  // Prepare the data to send to the backend
+  const data = {
+    partner: companyName,
+    date: pickupDate,
+    location: pickupLocation,
+    foodType: "Non-Edible" // Set food type as "Non-Edible"
+  };
+
+  console.log("Sending data to backend:", data); // Log the data being sent
+
+  fetch('/api/add-requested-item', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to add requested item");
       }
-    }
-
-    function requestPickup(companyName) {
-      alert(`Material request sent for ${companyName}`);
-    }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Requested item added:", data);
+    })
+    .catch(error => {
+      console.error("Error adding requested item:", error);
+    });
+}
 
     window.onload = renderSavedListings;
   </script>

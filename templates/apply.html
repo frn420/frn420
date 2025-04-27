@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NGO Requirement Hub</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -14,61 +15,10 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       color: #2f855a;
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    .toggle-sidebar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background-color: #38a169;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 14px;
-      cursor: pointer;
-      z-index: 999;
-    }
-
-    .sidebar {
-      width: 300px;
-      background: #ffffff;
-      border-right: 2px solid #a4e3c1;
-      padding: 20px;
-      height: 100vh;
-      overflow-y: auto;
-      position: fixed;
-      top: 0;
-      left: -320px;
-      transition: all 0.3s ease;
-      z-index: 998;
-    }
-
-    .sidebar.active {
-      left: 0;
-    }
-
-    .sidebar h3 {
-      margin-bottom: 15px;
-      font-size: 1.4rem;
-      color: #22543d;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar li {
-      margin-bottom: 15px;
-      padding: 10px;
-      background-color: #f0fff4;
-      border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      font-size: 0.9rem;
-      cursor: pointer;
     }
 
     .main {
@@ -185,7 +135,6 @@
 </head>
 <body>
 
-  
   <div class="main">
     <h1>NGO Requirement Hub</h1>
     <p class="subtitle">Submit your food material needs to connect with potential donors</p>
@@ -210,59 +159,57 @@
   </div>
 
   <script>
-    let listings = JSON.parse(localStorage.getItem('ngoListings')) || [];
+    async function saveListing() {
+      const name = document.getElementById('companyName').value;
+      const type = document.getElementById('materialType').value;
+      const quantity = document.getElementById('quantity').value;
+      const pickup = document.getElementById('pickupDate').value;
+      const pickupLocation = document.getElementById('pickupLocation').value;
+      const contact = document.getElementById('contact').value;
 
-async function saveListing() {
-  const name = document.getElementById('companyName').value;
-  const type = document.getElementById('materialType').value;
-  const quantity = document.getElementById('quantity').value;
-  const pickup = document.getElementById('pickupDate').value;
-  const pickupLocation = document.getElementById('pickupLocation').value;
-  const contact = document.getElementById('contact').value;
+      if (!name || !type || !quantity || !pickup || !pickupLocation || !contact) {
+        alert("Please fill all fields");
+        return;
+      }
 
-  if (!name || !type || !quantity || !pickup || !pickupLocation || !contact) {
-    alert("Please fill all fields");
-    return;
-  }
+      const data = {
+        ngoName: name,
+        materialType: type,
+        quantity: parseFloat(quantity),
+        pickupDate: pickup,
+        pickupLocation: pickupLocation,
+        contact: contact
+      };
 
-  const data = {
-    ngoName: name,
-    materialType: type,
-    quantity: parseFloat(quantity),
-    pickupDate: pickup,
-    pickupLocation: pickupLocation,
-    contact: contact
-  };
+      try {
+        const response = await fetch('/api/add-ngo-requirement', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
 
-  try {
-    const response = await fetch('/api/add-ngo-requirement', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+        if (!response.ok) {
+          throw new Error("Failed to add requirement");
+        }
 
-    if (!response.ok) {
-      throw new Error("Failed to add requirement");
+        alert("Requirement submitted successfully!");
+        document.getElementById('companyName').value = '';
+        document.getElementById('materialType').value = '';
+        document.getElementById('quantity').value = '';
+        document.getElementById('pickupDate').value = '';
+        document.getElementById('pickupLocation').value = '';
+        document.getElementById('contact').value = '';
+
+        renderSavedListings(); // Refresh the listings
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while adding the requirement.");
+      }
     }
 
-    alert("Requirement submitted successfully!");
-    document.getElementById('companyName').value = '';
-    document.getElementById('materialType').value = '';
-    document.getElementById('quantity').value = '';
-    document.getElementById('pickupDate').value = '';
-    document.getElementById('pickupLocation').value = '';
-    document.getElementById('contact').value = '';
-
-    renderSavedListings(); // Refresh the listings
-  } catch (error) {
-    console.error("Error:", error);
-    alert("An error occurred while adding the requirement.");
-  }
-}
-
-async function renderSavedListings() {
+    async function renderSavedListings() {
   const container = document.getElementById('listingContainer');
   container.innerHTML = '';
 
@@ -279,9 +226,14 @@ async function renderSavedListings() {
       return;
     }
 
+    // Get the requested items from localStorage
+    const requestedItems = JSON.parse(localStorage.getItem('requestedItems')) || [];
+
     requirements.forEach(data => {
       const card = document.createElement('div');
       card.className = 'card';
+      const isRequested = requestedItems.includes(data.id); // Check if the item was already requested
+
       card.innerHTML = `
         <h3>${data.ngoName}</h3>
         <p>
@@ -291,7 +243,11 @@ async function renderSavedListings() {
           Location: ${data.pickupLocation}<br>
           Contact: ${data.contact}<br>
         </p>
-        <button onclick="requestRequirement('${data.id}', '${data.ngoName}')">Request Order</button>
+        <button id="request-${data.id}" 
+          ${isRequested ? 'disabled style="background-color: #a5d6a7; cursor: default;"' : ''}
+          onclick="requestRequirement('${data.id}', '${data.ngoName}', '${data.pickupDate}', '${data.pickupLocation}')">
+          ${isRequested ? 'Request Sent ✅' : 'Request Order'}
+        </button>
       `;
       container.appendChild(card);
     });
@@ -301,20 +257,54 @@ async function renderSavedListings() {
   }
 }
 
-function requestRequirement(id, ngoName) {
-  alert(`Material request sent for ${ngoName} (ID: ${id}).`);
-  // Optionally, send a request to the backend to mark the requirement as requested
-  // Example:
-  // fetch(`/api/request-ngo-requirement/${id}`, { method: 'POST' })
-  //   .then(response => {
-  //     if (!response.ok) throw new Error("Failed to request requirement");
-  //     alert("Requirement successfully requested!");
-  //   })
-  //   .catch(error => console.error("Error:", error));
+    function requestRequirement(id, ngoName, pickupDate, pickupLocation) {
+  // Display the required information
+  alert(`Material request sent for ${ngoName}`);
+
+  // Find the button that triggered the event and update its text
+  const button = event.target;
+  button.textContent = "Request Sent ✅";
+  button.disabled = true; // Disable the button to prevent duplicate requests
+  button.style.backgroundColor = "#a5d6a7"; // Change button color to indicate success
+  button.style.cursor = "default"; // Change cursor to default
+
+  // Save the request state in localStorage
+  const requestedItems = JSON.parse(localStorage.getItem('requestedItems')) || [];
+  if (!requestedItems.includes(id)) {
+    requestedItems.push(id);
+    localStorage.setItem('requestedItems', JSON.stringify(requestedItems));
+  }
+
+  // Send the requested item to the backend
+  const data = {
+    partner: ngoName,
+    date: pickupDate,
+    location: pickupLocation,
+    foodType: "Edible" // Set food type as "Edible"
+  };
+
+  fetch('/api/add-requested-item', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to add requested item");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Requested item added:", data);
+    })
+    .catch(error => {
+      console.error("Error adding requested item:", error);
+    });
 }
 
-window.onload = renderSavedListings;
-
+    window.onload = renderSavedListings;
   </script>
 </body>
 </html>

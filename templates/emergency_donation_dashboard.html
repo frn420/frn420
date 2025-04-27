@@ -3,17 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Emergency Meal Donations</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #fff3e0);
+      background-color: #fcebea;
       padding: 40px;
+      color: #1b1b1b;
+      animation: fadeIn 1s ease-in;
     }
 
     h2 {
       text-align: center;
-      color: #00695c;
+      color: #ffffff;
       margin-bottom: 30px;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+      background-color: #c62828;
+      padding: 15px;
+      border-radius: 12px;
+      animation: popIn 0.6s ease-in-out;
     }
 
     .donation-list {
@@ -24,26 +33,51 @@
     }
 
     .donation-card {
-      background: white;
+      background: #ffffff;
+      border-left: 8px solid #c62828;
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      width: 300px;
-      animation: slideIn 0.4s ease-in-out;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      width: 320px;
+      animation: slideIn 0.5s ease-in-out;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .donation-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.25);
     }
 
     .donation-card h3 {
       margin-top: 0;
-      color: #d32f2f;
+      color: #c62828;
+      font-size: 1.4rem;
+      animation: fadeInText 0.8s ease;
     }
 
     .donation-card p {
-      margin: 5px 0;
-      font-size: 0.95rem;
+      margin: 6px 0;
+      font-size: 0.96rem;
+      animation: fadeInText 1s ease;
     }
 
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -52,64 +86,71 @@
       text-align: center;
       margin-top: 30px;
       font-weight: bold;
-      color: #00796b;
+      color: #ffffff;
+      background-color: #c62828;
+      padding: 10px 20px;
+      border-radius: 8px;
       text-decoration: none;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      animation: popIn 0.8s ease-in-out;
     }
 
     .back-link:hover {
-      text-decoration: underline;
+      background-color: #b71c1c;
     }
   </style>
 </head>
 <body>
-  <h2>Emergency Meal Donations</h2>
+  <h2>🚨 Emergency Meal Donations</h2>
   <div class="donation-list" id="donationList"></div>
 
   <a href="donate_form.html" class="back-link">← Submit Another Donation</a>
 
   <script>
-  async function fetchDonations() {
-    try {
-      const response = await fetch("/api/emergency-donations");
-      if (!response.ok) {
-        throw new Error("Failed to fetch donations");
-      }
+    async function fetchDonations() {
+      try {
+        const response = await fetch("/api/emergency-donations");
+        if (!response.ok) {
+          throw new Error("Failed to fetch donations");
+        }
 
-      const donations = await response.json();
-      const listContainer = document.getElementById("donationList");
+        const donations = await response.json();
+        const listContainer = document.getElementById("donationList");
 
-      if (donations.length === 0) {
-        listContainer.innerHTML = "<p>No donations yet. Be the first to donate!</p>";
-      } else {
-        donations.forEach(donation => {
-          const card = document.createElement("div");
-          card.className = "donation-card";
-          card.innerHTML = `
-            <h3>${donation.name}</h3>
-            <p><strong>Phone:</strong> ${donation.phone}</p>
-            <p><strong>Email:</strong> ${donation.email}</p>
-            <p><strong>Location:</strong> ${donation.location}</p>
-            <p><strong>Food Type:</strong> ${donation.food_type}</p>
-            <p><strong>Quantity:</strong> ${donation.quantity}</p>
-            <p><strong>Available From:</strong> ${donation.available_from}</p>
-            <p><strong>Expiry:</strong> ${donation.expiry}</p>
-            <p><strong>Recurring:</strong> ${donation.recurring}</p>
-            <p><strong>Donation Type:</strong> ${donation.donation_type}</p>
-            <p><strong>Packaged:</strong> ${donation.packaged}</p>
-            <p><strong>Comments:</strong> ${donation.comments || 'None'}</p>
-          `;
-          listContainer.appendChild(card);
-        });
+        if (donations.length === 0) {
+          listContainer.innerHTML = "<p style='text-align:center; color:#c62828;'>No donations yet. Be the first to donate and save a life!</p>";
+        } else {
+          donations.forEach(donation => {
+            const card = document.createElement("div");
+            card.className = "donation-card";
+            card.innerHTML = `
+              <h3>${donation.name}</h3>
+              <p><strong>📞 Phone:</strong> ${donation.phone}</p>
+              <p><strong>📧 Email:</strong> ${donation.email}</p>
+              <p><strong>📍 Location:</strong> ${donation.location}</p>
+              <p><strong>🍱 Food Type:</strong> ${donation.food_type}</p>
+              <p><strong>📦 Quantity:</strong> ${donation.quantity}</p>
+              <p><strong>🕒 Available From:</strong> ${donation.available_from}</p>
+              <p><strong>⏳ Expiry:</strong> ${donation.expiry || 'N/A'}</p>
+              <p><strong>🔁 Recurring:</strong> ${donation.recurring}</p>
+              <p><strong>📄 Donation Type:</strong> ${donation.donation_type}</p>
+              <p><strong>🛍️ Packaged:</strong> ${donation.packaged}</p>
+              <p><strong>💬 Comments:</strong> ${donation.comments || 'None'}</p>
+            `;
+            listContainer.appendChild(card);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching donations:", error);
+        document.getElementById("donationList").innerHTML = "<p style='text-align:center; color:#c62828;'>Failed to load donations.</p>";
       }
-    } catch (error) {
-      console.error("Error fetching donations:", error);
-      document.getElementById("donationList").innerHTML = "<p>Failed to load donations.</p>";
     }
-  }
 
-  // Fetch donations on page load
-  fetchDonations();
-</script>
+    // Fetch donations on page load
+    fetchDonations();
+  </script>
 </body>
 </html>
 

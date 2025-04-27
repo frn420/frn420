@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Donor Dashboard | Food Rescue Network</title>
+  <link rel="icon" href="/static/web_photo/logo.jpg" type="image/jpeg" />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
   <style>
     * {
       box-sizing: border-box;
@@ -12,13 +15,12 @@
     }
 
     html, body {
-  overflow-x: hidden;
-     }
-
+      overflow-x: hidden;
+    }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f0fdf4, #c6f6d5);
+      background: linear-gradient(135deg, #e9f7f1, #a8e6cf);
       color: #2f855a;
       min-height: 100vh;
       display: flex;
@@ -26,12 +28,13 @@
       align-items: center;
       padding: 40px 20px;
       position: relative;
+      overflow: hidden;
     }
 
     h1 {
       font-size: 2.8rem;
       font-weight: bold;
-      color: #22543d;
+      color: #2c6b2f;
       margin-bottom: 10px;
       text-align: center;
     }
@@ -60,18 +63,24 @@
       }
     }
 
+    @media (min-width: 1024px) {
+      .dashboard {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+    }
+
     .card {
       background-color: #ffffff;
       border-radius: 20px;
       padding: 30px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      animation: fadeInUp 0.6s ease;
+      text-align: center;
     }
 
     .card::before {
@@ -81,14 +90,14 @@
       left: 0;
       width: 100%;
       height: 6px;
-      background-color: #38a169;
+      background-color: #388e3c;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
     }
 
     .card h2 {
@@ -101,6 +110,12 @@
       color: #4a5568;
       font-size: 1rem;
       margin-bottom: 20px;
+    }
+
+    .card i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #388e3c;
     }
 
     .card button {
@@ -117,7 +132,7 @@
 
     .card button:hover {
       background-color: #2f855a;
-      transform: scale(1.05);
+      transform: scale(1.02);
     }
 
     .section-title {
@@ -138,7 +153,6 @@
       border-radius: 12px;
       color: #2c7a7b;
       font-size: 1rem;
-      animation: fadeIn 1s ease;
     }
 
     footer {
@@ -148,41 +162,14 @@
       text-align: center;
     }
 
-    .decorative-circle {
-      position: absolute;
-      top: -100px;
-      right: -100px;
-      width: 200px;
-      height: 200px;
-      background-color: rgba(56, 161, 105, 0.15);
-      border-radius: 50%;
-      z-index: 0;
+    footer a {
+      color: #388e3c;
+      text-decoration: none;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
   </style>
 </head>
 <body>
-
-  <div class="decorative-circle"></div>
 
   <h1>Donor Dashboard</h1>
   <p class="subtitle">Manage your food donations and view requests</p>
@@ -193,24 +180,28 @@
     </div>
 
     <div class="card">
+      <i class="fas fa-plus-circle"></i>
       <h2>New Donation</h2>
       <p>List surplus food available for pickup or delivery.</p>
       <button onclick="createDonation()">Create Donation</button>
     </div>
 
     <div class="card">
+      <i class="fas fa-box-open"></i>
       <h2>My Donations</h2>
       <p>Track the status of your active and past donations.</p>
       <button onclick="viewDonations()">View My Donations</button>
     </div>
 
     <div class="card">
+      <i class="fas fa-users"></i>
       <h2>Matched Requests</h2>
       <p>See which receivers have requested your food items.</p>
       <button onclick="viewMatches()">View Matches</button>
     </div>
 
     <div class="card">
+      <i class="fas fa-calendar-check"></i>
       <h2>Available Pickups</h2>
       <p>Coordinate pickup times with receivers for confirmed donations.</p>
       <button onclick="viewSchedule()">View Schedule</button>
@@ -219,6 +210,7 @@
     <div class="section-title">Helpful Tips</div>
 
     <div class="card" style="grid-column: 1 / -1;">
+      <i class="fas fa-book"></i>
       <h2>Donation Guidelines</h2>
       <p>Ensure all food is properly packaged and within expiration dates. Communicate clearly with receivers about pickup logistics.</p>
       <button onclick="viewGuidelines()">Read Guidelines</button>
@@ -226,28 +218,28 @@
   </div>
 
   <footer>
-    © 2025 Food Rescue Network. All rights reserved.
+    © 2025 Food Rescue Network. All rights reserved. <a href="t&c.html">Terms and Conditions</a>
   </footer>
 
   <script>
     function createDonation() {
-        window.location.href = "create.html";
+      window.location.href = "create.html";
     }
 
     function viewDonations() {
-        window.location.href = "my_doantions.html"; // Link to the My Donations page
+      window.location.href = "my_doantions.html"; // Link to the My Donations page
     }
 
     function viewMatches() {
-        window.location.href = "match.html";
+      window.location.href = "match.html";
     }
 
     function viewSchedule() {
-        window.location.href = "pickup.html";
+      window.location.href = "pickup.html";
     }
 
     function viewGuidelines() {
-        window.location.href = "donation_guidelines.html";
+      window.location.href = "donation_guidelines.html";
     }
   </script>
 
